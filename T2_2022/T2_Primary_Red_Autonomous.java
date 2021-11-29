@@ -28,21 +28,21 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         telemetry.update();
 
         // move forward
-        xTo(-10, 5000, 0.4, 1, this, true);
+        xTo(-10, 5000, 0.5, 1, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
         sleep(500);
 
         //turn
-        turnToV2(88, 6000, 0.2, this);
+        turnToV2(88, 6000, this);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
         sleep(500);
 
         // move forward to carousel
-        yTo(-15, 5000, 0.3, 1, this, true);
+        yTo(-15, 5000, 0.5, 1, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -56,7 +56,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // move forward to carousel
-        xTo(-23.5, 5000, 0.2, 1, this, false);
+        xTo(-23.5, 3500, 0.2, 1, this, false);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -68,7 +68,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         stopCarousel();
 
         // move a few inches back
-        xTo(-31, 5000, 0.2, 1, this, false);
+        xTo(-31, 5000, 0.3, 1, this, false);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -76,7 +76,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
 
 
         // turn 90 degrees
-        turnToV2(92, 10000, 0.2, this);
+        turnToV2(92, 10000, 0.3, this);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -84,7 +84,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
 
 
         // move to wobble a few inches behind to drop the arm
-        yTo(5, 5000, 0.3, 2, this, true);
+        yTo(5, 5000, 0.5, 2, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -111,8 +111,6 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         // dump freight
         arm.dump();
         sleep(1500);
-
-
         arm.container.dumpBlock();
 
         // move back
@@ -133,13 +131,15 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         telemetry.update();
         sleep(500);
 
-        turnToV2(0, 10000, 0.3, this);
+        // turn to hub
+        turnToV2(0, 10000, this);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
         sleep(500);
 
-        xTo(-25, 5000, 0.3, 2, this, true);
+        // park inside hub
+        xTo(-25, 5000, 0.4, 2, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();

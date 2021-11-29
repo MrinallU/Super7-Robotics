@@ -31,7 +31,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // turn to wobble
-        turnToV2(88, 6000, 0.2, this);
+        turnToV2(88, 6000, 0.4, this);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -47,6 +47,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         }
         sleep(1000);
 
+        // place arm inside freight
         yTo(-10, 5000, 0.3, 1, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -73,6 +74,15 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
+
+        // turn to freight stack
+        turnToV2(0, 6000, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
+
 
 
 
