@@ -17,7 +17,7 @@ public class T2_Camera {
     private VuforiaLocalizer vuforia;
     private HardwareMap hardwareMap;
 
-    private int blueThreshold = 100;
+    private int greenThreshold = 160;
 
     public String outStr = "";
 
@@ -28,6 +28,41 @@ public class T2_Camera {
     public T2_Camera(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
         initVuforia();
+    }
+    
+    public int readBarcode(String auto) throws InterruptedException{
+        int position = 0;
+        Bitmap bm;
+        double[] posOne = new double[4];
+        double[] posTwo = new double[4];
+        double[] posThree = new double[4];
+
+        VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
+        bm = vuforia.convertFrameToBitmap(closeableFrame);
+        if(auto == "redPrimary"){
+            posOne = calculateAverageRGB(bm, 492, 133, 589, 195);
+            posTwo = calculateAverageRGB(bm, 20, 158, 84, 220);
+            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
+        }else if(auto == "redSecondary"){
+            posOne = calculateAverageRGB(bm, 952, 143, 976, 185);
+            posTwo = calculateAverageRGB(bm, 455, 159, 502, 207);
+            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
+        }else if(auto == "bluePrimary"){
+
+        }else if(auto == "blueSecondary"){
+
+        }
+
+
+        if(posOne[2] > greenThreshold){
+            return 1;
+        }else if(posTwo[2] > greenThreshold){
+            return 2;
+        }
+        return 3;
+
+
+
     }
 
 
