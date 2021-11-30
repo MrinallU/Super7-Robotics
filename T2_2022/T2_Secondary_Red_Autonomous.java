@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.T2_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
+import org.firstinspires.ftc.teamcode.T2_2022.Modules.Vision.T2_Camera;
 
 @Autonomous(name="T1_Secondary_Red_Autonomous", group="Autonomous")
 public class T2_Secondary_Red_Autonomous extends T2_Base {
@@ -52,6 +52,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
+        sleep(500);
 
         // dump freight
         arm.dump();
@@ -70,7 +71,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         //move into barrier
-        yTo(25, 5000, 0.4, 1, this, true);
+        yTo(25, 5000, 0.6, 1, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();

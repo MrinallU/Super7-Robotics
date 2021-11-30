@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.T2_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
+import org.firstinspires.ftc.teamcode.T2_2022.Modules.Vision.T2_Camera;
 
 @Autonomous(name="T1_Primary_Red_Autonomous", group="Autonomous")
 public class T2_Primary_Red_Autonomous extends T2_Base {
@@ -13,6 +13,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         init(0);
         initServosAuto();
         T2_Camera camera = new T2_Camera(hardwareMap);
+        pos = camera.readBarcode("redPrimary");
         initOdometry();
 
         telemetry.addData("Status", "Initialized");
@@ -56,7 +57,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // move forward to carousel
-        xTo(-23.5, 3500, 0.2, 1, this, false);
+        xTo(-23.5, 3500, 0.4, 1, this, false);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -68,7 +69,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         stopCarousel();
 
         // move a few inches back
-        xTo(-31, 5000, 0.3, 1, this, false);
+        xTo(-31, 5000, 0.5, 1, this, false);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -76,7 +77,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
 
 
         // turn 90 degrees
-        turnToV2(92, 10000, 0.3, this);
+        turnToV2(92, 10000, this);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -98,7 +99,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         }else{
             arm.moveBottom();
         }
-        sleep(1500);
+        sleep(1000);
 
         // move arm inside the wobble
         yTo(18, 5000, 0.3, 2, this, true);
@@ -125,7 +126,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // move back and park
-        yTo(-20, 5000, 0.4, 2, this, true);
+        yTo(-19, 5000, 0.5, 2, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -139,7 +140,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // park inside hub
-        xTo(-25, 5000, 0.4, 2, this, true);
+        xTo(-25, 5000, 0.6, 2, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -154,5 +155,5 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         }
 
         odometry.stopT265();
-    }
+     }
 }

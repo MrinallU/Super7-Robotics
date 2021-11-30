@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.Point;
+import org.firstinspires.ftc.teamcode.Utils.SplineGenerator;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -30,6 +31,7 @@ public abstract class T3_Base extends LinearOpMode {
 
     // Odometry
     T3_T265Odometry odometry;
+    SplineGenerator splineGenerator = new SplineGenerator();
 
     // Motors
     protected Motor fLeftMotor, bLeftMotor, fRightMotor, bRightMotor;
@@ -246,13 +248,6 @@ public abstract class T3_Base extends LinearOpMode {
         turnTo(targetAngle, timeout, 0.7);
     }
 
-    // auto-aim
-    public void aimTo(Point destPos){
-        double xDiff = destPos.xP - odometry.getX(); double yDiff = destPos.yP - odometry.getY();
-        double angle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
-        turnTo(angle, 3000);
-    }
-
     public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference){
         double currAngle = T3_Readings.angle;
         ElapsedTime time = new ElapsedTime();
@@ -268,6 +263,47 @@ public abstract class T3_Base extends LinearOpMode {
 
         setDrivePowers(0, 0, 0, 0);
     }
+
+    // auto-aim
+    public void aimTo(Point destPos){
+        double xDiff = destPos.xP - odometry.getX(); double yDiff = destPos.yP - odometry.getY();
+        double angle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
+        turnTo(angle, 6000);
+    }
+
+    public void followSplinePath(Point [] p) {
+        BigDecimal[] coefficients = splineGenerator.generateSplinePath(p);
+
+        for (int i = 0; i < coefficients.length; i += 4) {
+            for (double x = p[i / 4].xP; x <= p[(i / 4) + 1].xP; x += 5) {
+                BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(x).pow(3, MathContext.DECIMAL64));
+                BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(x).pow(2, MathContext.DECIMAL64));
+                BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(x));
+                BigDecimal d = coefficients[i + 3];
+                double y = (a.add(b).add(c).add(d)).doubleValue();
+
+                // odometry.x, y, and angle are robot's current values
+                double xDiff = x - odometry.getX(); double yDiff = y - odometry.getY();
+                double angle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
+
+                splineMove(x, y, angle, 2, 2, 2, 4000, this);
+            }
+
+            double destX = p[(i / 4) + 1].xP;
+            BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(destX).pow(3, MathContext.DECIMAL64));
+            BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(destX).pow(2, MathContext.DECIMAL64));
+            BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(destX));
+            BigDecimal d = coefficients[i + 3];
+
+            double destY = (a.add(b).add(c).add(d)).doubleValue();
+            double xDiff = destX - odometry.getX(); double yDiff = destY - odometry.getY();
+            double destAngle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
+            splineMove(p[(i / 4) + 1].xP, destY, destAngle, 2, 2, 2, 4000, this);
+        }
+        setDrivePowers(0, 0, 0, 0);
+    }
+
+
 
     // ODOMETRY FUNCTIONS
     private final double distanceToPowerScale = 0.03;
@@ -399,8 +435,6 @@ public abstract class T3_Base extends LinearOpMode {
         driveRobotCentric(0, 0, 0);
     }
 
-
-
     public void moveToPosition(double targetXPos, double targetYPos, double targetAngle, double posAccuracy, double angleAccuracy, double timeout, OpMode opMode) {
         moveToPosition(targetXPos, targetYPos, targetAngle, posAccuracy, posAccuracy, angleAccuracy, timeout, opMode);
     }
@@ -428,155 +462,6 @@ public abstract class T3_Base extends LinearOpMode {
 
     public void moveToPosition(Point p, double posAccuracy, double timeout, OpMode opMode) {
         moveToPosition(p.xP, p.yP, p.ang, posAccuracy, 2, timeout, opMode);
-    }
-
-
-    public void cubicSplineInterpolation(Point [] p) {
-        int row = 0;
-        int solutionIndex = (p.length - 1) * 4;
-        Arrays.sort(p);
-        // initialize matrix
-        BigDecimal[][] m = new BigDecimal[(p.length - 1) * 4][(p.length - 1) * 4 + 1]; // rows
-        for (int  i = 0; i < (p.length - 1) * 4; i++) {
-            for (int j = 0; j <= (p.length - 1) * 4; j++) {
-                m[i][j] = BigDecimal.ZERO; // fill with zeros
-            }
-        }
-
-        // n - 1 splines
-        for (int functionNr = 0; functionNr < p.length - 1; functionNr++, row++) {
-            Point p0 = p[functionNr], p1 = p[functionNr + 1];
-            m[row][functionNr * 4] = new BigDecimal(p0.xP, MathContext.DECIMAL64).pow(3, MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 1] = new BigDecimal(p0.xP, MathContext.DECIMAL64).pow(2, MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 2] = new BigDecimal(p0.xP, MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 3] = new BigDecimal(1, MathContext.DECIMAL64);
-
-            m[row][solutionIndex] = new BigDecimal(p0.yP, MathContext.DECIMAL64);
-
-            ++row;
-
-            m[row][functionNr * 4] = new BigDecimal(p1.xP, MathContext.DECIMAL64).pow(3, MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 1] = new BigDecimal(p1.xP, MathContext.DECIMAL64).pow(2, MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 2] = new BigDecimal(p1.xP, MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 3] = new BigDecimal(1, MathContext.DECIMAL64);
-
-            m[row][solutionIndex] = new BigDecimal(p1.yP, MathContext.DECIMAL64);
-
-        }
-
-        // first derivative
-        for (int functionNr = 0; functionNr < p.length - 2; functionNr++, row++) {
-            Point p1 = p[functionNr + 1];
-            m[row][functionNr * 4] = new BigDecimal(3, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP).pow(2, MathContext.DECIMAL64));
-
-            m[row][functionNr * 4 + 1] = new BigDecimal(2, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP), MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 2] = new BigDecimal(1, MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 4] = new BigDecimal(-3).multiply(new BigDecimal(p1.xP).pow(2, MathContext.DECIMAL64));
-
-            m[row][functionNr * 4 + 5] = new BigDecimal(-2, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP), MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 6] = new BigDecimal(-1, MathContext.DECIMAL64);
-
-        }
-
-
-        // second derivative
-        for (int functionNr = 0; functionNr < p.length - 2; functionNr++, row++) {
-            Point p1 = p[functionNr + 1];
-            m[row][functionNr * 4] = new BigDecimal(6, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP, MathContext.DECIMAL64), MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 1] = new BigDecimal(2, MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 4] = new BigDecimal(-6, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP, MathContext.DECIMAL64), MathContext.DECIMAL64);
-
-            m[row][functionNr * 4 + 5] = new BigDecimal(-2, MathContext.DECIMAL64);
-        }
-
-
-        // check these calculations later
-        m[row][0] = new BigDecimal(6, MathContext.DECIMAL64).multiply(new BigDecimal(p[0].xP, MathContext.DECIMAL64), MathContext.DECIMAL64);
-
-        m[row++][1] = new BigDecimal(2, MathContext.DECIMAL64);
-
-        m[row][solutionIndex - 4] = new BigDecimal(6, MathContext.DECIMAL64).multiply(new BigDecimal(p[p.length - 1].xP, MathContext.DECIMAL64), MathContext.DECIMAL64);
-
-        m[row][solutionIndex - 4 + 1] = new BigDecimal(2, MathContext.DECIMAL64);
-
-
-        BigDecimal[][] reducedRowEchelonForm = rref(m);
-        BigDecimal[] coefficients = new BigDecimal[reducedRowEchelonForm.length];
-        for (int i = 0; i < reducedRowEchelonForm.length; i++) {
-            coefficients[i] = reducedRowEchelonForm[i][reducedRowEchelonForm[i].length - 1];
-        }
-
-        for (int i = 0; i < coefficients.length; i += 4) {
-            for (double x = p[i / 4].xP; x <= p[(i / 4) + 1].xP; x += 5) {
-                BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(x).pow(3, MathContext.DECIMAL64));
-                BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(x).pow(2, MathContext.DECIMAL64));
-                BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(x));
-                BigDecimal d = coefficients[i + 3];
-                double y = (a.add(b).add(c).add(d)).doubleValue();
-
-                // odometry.x, y, and angle are robot's current values
-                double xDiff = x - odometry.getX(); double yDiff = y - odometry.getY();
-                double angle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
-
-                splineMove(x, y, angle, 2, 2, 2, 4000, this);
-            }
-
-            double destX = p[(i / 4) + 1].xP;
-            BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(destX).pow(3, MathContext.DECIMAL64));
-            BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(destX).pow(2, MathContext.DECIMAL64));
-            BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(destX));
-            BigDecimal d = coefficients[i + 3];
-
-            double destY = (a.add(b).add(c).add(d)).doubleValue();
-            double xDiff = destX - odometry.getX(); double yDiff = destY - odometry.getY();
-            double destAngle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
-            splineMove(p[(i / 4) + 1].xP, destY, destAngle, 2, 2, 2, 4000, this);
-        }
-        setDrivePowers(0, 0, 0, 0);
-    }
-
-    public static BigDecimal [][] rref(BigDecimal[][] mat) {
-        int lead = 0;
-        for (int r = 0; r < mat.length; r++) {
-            int i = r;
-            while (mat[i][lead].compareTo(BigDecimal.ZERO) == 0) {
-                i++;
-                if (mat.length == i) {
-                    i = r;
-                    lead++;
-                }
-            }
-
-            BigDecimal [] tmp = mat[i];
-            mat[i] = mat[r];
-            mat[r] = tmp;
-
-            BigDecimal val = mat[r][lead];
-            for (int j = 0; j < mat[0].length; j++) {
-                mat[r][j] = mat[r][j].divide(val, MathContext.DECIMAL64);
-            }
-
-            for (i = 0; i < mat.length; i++) {
-                if (i == r) continue;
-                val = mat[i][lead];
-                for (int j = 0; j < mat[0].length; j++) {
-                    mat[i][j] = mat[i][j].subtract(val.multiply(mat[r][j], MathContext.DECIMAL64), MathContext.DECIMAL64);
-                }
-            }
-            lead++;
-        }
-        return mat;
     }
 
     public void autoAimToWobble(OpMode opMode){

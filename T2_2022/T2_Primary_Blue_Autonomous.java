@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.T2_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
+import org.firstinspires.ftc.teamcode.T2_2022.Modules.Vision.T2_Camera;
 
 @Autonomous(name="T1_Primary_Blue_Autonomous", group="Autonomous")
 public class T2_Primary_Blue_Autonomous extends T2_Base {

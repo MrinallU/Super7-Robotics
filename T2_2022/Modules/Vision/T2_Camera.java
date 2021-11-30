@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.T2_2022.Modules;
+package org.firstinspires.ftc.teamcode.T2_2022.Modules.Vision;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -53,16 +53,14 @@ public class T2_Camera {
 
         }
 
+        double maxGreen = Math.max(posOne[2], Math.max(posTwo[2], posThree[2]));
 
-        if(posOne[2] > greenThreshold){
+        if(posOne[2] == maxGreen)
+            return 0;
+        else if(posTwo[2] == maxGreen)
             return 1;
-        }else if(posTwo[2] > greenThreshold){
+        else
             return 2;
-        }
-        return 3;
-
-
-
     }
 
 
