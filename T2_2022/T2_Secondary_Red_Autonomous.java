@@ -68,7 +68,6 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
 
         //reset arm
         arm.moveToPosition(135);
-        sleep(500);
 
         //move into barrier
         yTo(25, 5000, 0.6, 1, this, true);
@@ -82,11 +81,6 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
         sleep(500);
-
-
-
-
-
 
 
         while(opModeIsActive()){

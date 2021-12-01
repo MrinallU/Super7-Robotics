@@ -57,7 +57,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // move forward to carousel
-        xTo(-23.5, 3500, 0.4, 1, this, false);
+        xTo(-23.5, 2000, 0.4, 1, this, false);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();

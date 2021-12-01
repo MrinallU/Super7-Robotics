@@ -53,14 +53,23 @@ public class T2_Camera {
 
         }
 
-        double maxGreen = Math.max(posOne[2], Math.max(posTwo[2], posThree[2]));
+        double maxGreen = Math.max(Math.max(posOne[2], Math.max(posTwo[2], posThree[2])), greenThreshold);
 
-        if(posOne[2] == maxGreen)
-            return 0;
-        else if(posTwo[2] == maxGreen)
-            return 1;
-        else
-            return 2;
+        if(auto.contains("red")) {
+            if (posOne[2] == maxGreen)
+                return 0;
+            else if (posTwo[2] == maxGreen)
+                return 1;
+            else
+                return 2;
+        }else{
+            if (posOne[2] == maxGreen)
+                return 2;
+            else if (posTwo[2] == maxGreen)
+                return 1;
+            else
+                return 0;
+        }
     }
 
 
