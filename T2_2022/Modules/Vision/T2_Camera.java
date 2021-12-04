@@ -30,7 +30,7 @@ public class T2_Camera {
         initVuforia();
     }
     
-    public int readBarcode(String auto) throws InterruptedException{
+    public int readBarcode(String auto, boolean scanTwo) throws InterruptedException{
         int position = 0;
         Bitmap bm;
         double[] posOne = new double[4];
@@ -40,12 +40,12 @@ public class T2_Camera {
         VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
         bm = vuforia.convertFrameToBitmap(closeableFrame);
         if(auto == "redPrimary"){
-            posOne = calculateAverageRGB(bm, 492, 133, 589, 195);
-            posTwo = calculateAverageRGB(bm, 20, 158, 84, 220);
+            posOne = calculateAverageRGB(bm, 954, 128, 1016, 173);
+            posTwo = calculateAverageRGB(bm, 523, 150, 596, 196);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "redSecondary"){
-            posOne = calculateAverageRGB(bm, 952, 143, 976, 185);
-            posTwo = calculateAverageRGB(bm, 455, 159, 502, 207);
+            posOne = calculateAverageRGB(bm, 492, 133, 589, 195);
+            posTwo = calculateAverageRGB(bm, 20, 158, 84, 220);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "bluePrimary"){
 
@@ -55,13 +55,14 @@ public class T2_Camera {
 
         double maxGreen = Math.max(Math.max(posOne[2], Math.max(posTwo[2], posThree[2])), greenThreshold);
 
-        if(auto.contains("red")) {
-            if (posOne[2] == maxGreen)
+        if(scanTwo) {
+            if(posOne[2] > greenThreshold){
                 return 0;
-            else if (posTwo[2] == maxGreen)
+            }else if(posTwo[2] > greenThreshold) {
                 return 1;
-            else
+            }else{
                 return 2;
+            }
         }else{
             if (posOne[2] == maxGreen)
                 return 2;
