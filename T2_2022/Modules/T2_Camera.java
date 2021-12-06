@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.T2_2022.Modules.Vision;
+package org.firstinspires.ftc.teamcode.T2_2022.Modules;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -40,18 +40,20 @@ public class T2_Camera {
         VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
         bm = vuforia.convertFrameToBitmap(closeableFrame);
         if(auto == "redPrimary"){
-            posOne = calculateAverageRGB(bm, 492, 133, 589, 195);
-            posTwo = calculateAverageRGB(bm, 20, 158, 84, 220);
+            posOne = calculateAverageRGB(bm, 1030, 72, 1062, 111);
+            posTwo = calculateAverageRGB(bm, 523, 150, 596, 196);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "redSecondary"){
-            posOne = calculateAverageRGB(bm, 952, 143, 976, 185);
-            posTwo = calculateAverageRGB(bm, 455, 159, 502, 207);
+            posOne = calculateAverageRGB(bm, 492, 133, 589, 195);
+            posTwo = calculateAverageRGB(bm, 20, 158, 84, 220);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "bluePrimary"){
 
         }else if(auto == "blueSecondary"){
 
         }
+
+        saveImage();
 
         double maxGreen = Math.max(Math.max(posOne[2], Math.max(posTwo[2], posThree[2])), greenThreshold);
 

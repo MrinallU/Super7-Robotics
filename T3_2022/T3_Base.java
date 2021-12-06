@@ -286,9 +286,12 @@ public abstract class T3_Base extends LinearOpMode {
                 double xDiff = x - odometry.getX(); double yDiff = y - odometry.getY();
                 double angle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
 
+                // todo: Pass in the next point and set drive powers at the end of the loop such that it starts traversing there
+                // todo: Set at power min so the spline doesn't slow down too much when traversing.
                 splineMove(x, y, angle, 2, 2, 2, 4000, this);
             }
 
+            // Just in case the final pos is a little bit off
             double destX = p[(i / 4) + 1].xP;
             BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(destX).pow(3, MathContext.DECIMAL64));
             BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(destX).pow(2, MathContext.DECIMAL64));

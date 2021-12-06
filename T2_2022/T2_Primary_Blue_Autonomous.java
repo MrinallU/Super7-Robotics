@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.T2_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.T2_2022.Modules.Vision.T2_Camera;
+import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
 
 @Autonomous(name="T1_Primary_Blue_Autonomous", group="Autonomous")
 public class T2_Primary_Blue_Autonomous extends T2_Base {
@@ -12,6 +12,7 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
         init(0);
         initServos();
         T2_Camera camera = new T2_Camera(hardwareMap);
+        camera.readBarcode("bluePrimary");
         initOdometry();
 
         telemetry.addData("Status", "Initialized");
@@ -42,7 +43,7 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
         telemetry.update();
 
 
-        turnTo(-115, 10000, 0.2, 3, this);
+        turnToV2(-115, 10000, this);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();

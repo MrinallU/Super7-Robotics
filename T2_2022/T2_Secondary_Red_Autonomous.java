@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.T2_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.T2_2022.Modules.Vision.T2_Camera;
+import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
 
 @Autonomous(name="T1_Secondary_Red_Autonomous", group="Autonomous")
 public class T2_Secondary_Red_Autonomous extends T2_Base {
@@ -13,8 +13,10 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         init(0);
         initServosAuto();
         T2_Camera camera = new T2_Camera(hardwareMap);
+        pos = camera.readBarcode("redSecondary");
         initOdometry();
 
+        telemetry.addData("Code ", pos);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
@@ -31,7 +33,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // turn to wobble
-        turnToV2(88, 6000, 0.4, this);
+        turnToV2(88, 6000, this);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -39,16 +41,22 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
 
         // drop arm to desired pos
         if(pos == 0){
-            arm.moveTop();
+            arm.moveBottom();
         }else if(pos == 1){
-            arm.moveMidBlue();
+            arm.moveMid();
         }else{
-            arm.moveBottomBlue();
+            arm.moveTop();
         }
         sleep(1000);
 
+        turnToV2(88, 6000, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
         // place arm inside freight
-        yTo(-10, 5000, 0.3, 1, this, true);
+        yTo(-12, 5000, 0.3, 1, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
@@ -66,17 +74,99 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
 
-        //reset arm
-        arm.moveToPosition(135);
-
         //move into barrier
-        yTo(25, 5000, 0.6, 1, this, true);
+        yTo(50, 5000, 0.3, 1, this, true);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
+        // turn to freight stack
+        turnToV2(45, 6000, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
+        arm.sweepPos();
+
+
+        // move into stack
+        xTo(-8, 5000, 0.3, 1, this, true);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
+
+        // sweep
+        sweeper.sweep();
+        sleep(2000);
+        sweeper.stop();
+        container.sweepBlock();
+        arm.moveTop();
+
+        // move back
+        xTo(-13, 5000, 0.3, 1, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
 
-        // turn to freight stack
-        turnToV2(0, 6000, this);
+        // turn to Barrier
+        turnToV2(88, 6000, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
+        // move to wobble
+        yTo(0, 5000, 0.3, 1, this, true);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+
+        // turn to wobble
+        turnToV2(88, 6000, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
+        yTo(-12, 5000, 0.3, 1, this, true);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+
+        // drop arm to desired pos
+        arm.moveTop();
+
+        turnToV2(88, 6000, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
+        // place arm inside freight
+        yTo(-12, 5000, 0.3, 1, this, true);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(500);
+
+        // dump freight
+        arm.dump();
+        sleep(1000);
+        arm.container.dumpBlock();
+        sleep(500);
+
+        //approach barrier
+        yTo(-2, 5000, 0.5, 1, this, true);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+
+        //move into barrier
+        yTo(50, 5000, 0.3, 1, this, true);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();

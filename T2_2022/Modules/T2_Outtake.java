@@ -19,7 +19,7 @@ public class T2_Outtake {
         motor1.setTarget(pos);
         motor1.retMotorEx().setTargetPositionTolerance(3);
         motor1.toPosition();
-        motor1.setPower(0.15);
+        motor1.setPower(0.3);
     }
 
     public void moveTop(){

@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.checkerframework.checker.fenum.qual.SwingCompassDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -106,7 +107,7 @@ public abstract class T2_Base extends LinearOpMode
         // Odometry
         resetAngle();
         if(matchType == 1){
-            odometry = new T2_T265Odometry(0, 19.9, -90, hardwareMap);
+            odometry = new T2_T265Odometry(0, 0, -90, hardwareMap);
         }
         else{
             odometry = new T2_T265Odometry(0, 0, 0, hardwareMap);
@@ -178,59 +179,7 @@ public abstract class T2_Base extends LinearOpMode
     }
 
     // my imu based turnTo
-    public void turnToV2(double targetAngle, double timeout, LinearOpMode opMode){
-        double angleDiff = 100, currTime = 0;
-        double prevAngleDiff = 100;
-        double dAng, iAng = 0;
-
-        ElapsedTime time = new ElapsedTime(), cycleTime = new ElapsedTime();
-        double prevTime = 0;
-
-        while (time.milliseconds() < timeout && Math.abs(targetAngle - getAngle()) > 2 && opMode.opModeIsActive())  {
-            cycleTime.reset();
-            resetCache();
-            odometry.updatePosition();
-            currTime = time.milliseconds() + 0.00001; // avoids divide by 0 error
-
-            // error from input
-            angleDiff = Angle.angleDifference(getAngle(), targetAngle);
-/*            angleDiff = targetAngle - getAngle();
-            angleDiff %= 360; // normalize
-            angleDiff += 360;
-            angleDiff %= 360;
-            if (angleDiff > 180) {
-                angleDiff -= 360;
-            }
-*/
-            // update
-            dAng = (angleDiff - prevAngleDiff) / (currTime - prevTime);
-            iAng +=  (angleDiff * (currTime - prevTime));
-
-            if(max_i < iAng){
-                iAng = max_i;
-            }else if(max_i * -1 > iAng){
-                iAng = -max_i;
-            }
-
-            prevTime = currTime;
-            prevAngleDiff = angleDiff;
-
-            // 0.1 = f, tanh = makes the values approach 1 to -1
-                double power = 0.1 * Math.signum(angleDiff)
-                    + 0.9 * Math.tanh(k_p * angleDiff + k_d * dAng);
-
-                setDrivePowers(-power, power, -power, power);
-
-            // Teleop Breakout
-            if(gamepad1.a && gamepad2.a){
-                break;
-            }
-        }
-        // stop when pos is reached
-        stopBot();
-    }
-
-    public void turnToV2(double targetAngle, double timeout, double powerCap, LinearOpMode opMode){
+    public void turnToV2(double targetAngle, double timeout, double powerCap, LinearOpMode opMode)  {
         double angleDiff = 100, currTime = 0;
         double prevAngleDiff = 100;
         double dAng, iAng = 0;
@@ -246,14 +195,7 @@ public abstract class T2_Base extends LinearOpMode
 
             // error from input
             angleDiff = Angle.angleDifference(getAngle(), targetAngle);
-/*            angleDiff = targetAngle - getAngle();
-            angleDiff %= 360; // normalize
-            angleDiff += 360;
-            angleDiff %= 360;
-            if (angleDiff > 180) {
-                angleDiff -= 360;
-            }
-*/
+
             // update
             dAng = (angleDiff - prevAngleDiff) / (currTime - prevTime);
             iAng +=  (angleDiff * (currTime - prevTime));
@@ -282,28 +224,8 @@ public abstract class T2_Base extends LinearOpMode
         stopBot();
     }
 
-    // my turn to
-    public void turnTo(double targetAngle, long timeout, double powerCap, double minDifference, OpMode opMode){
-        odometry.updatePosition();
-        double currAngle = odometry.getAngle();
-        ElapsedTime time = new ElapsedTime();
-        while(time.milliseconds() < timeout && targetAngle - currAngle > minDifference){
-            resetCache();
-            odometry.updatePosition();
-            currAngle = odometry.getAngle();
-            double angleDiff = currAngle - targetAngle;
+    public void turnToV2(double targetAngle, double timeout, LinearOpMode opMode){ turnToV2(targetAngle, timeout, 1, opMode); }
 
-            // Output the safe vales to the motor drives.
-            double turn = Range.clip(angleDiff * 0.01, -powerCap, powerCap) * -1;
-            setDrivePowers(-turn, turn, -turn, turn);
-        }
-        stopBot();
-    }
-
-    /*
-    Makes the robot drive to a desired position in the x-axis
-
-     */
     public void xTo(double targetX, double timeout, double powerCap, double minDifference, LinearOpMode opMode, boolean negate){
         odometry.updatePosition();
         double currX = odometry.getX(); // replace as needed

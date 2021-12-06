@@ -71,8 +71,8 @@ public class T2_Red_TeleOp extends T2_Base {
                 right /= max;
             }
 
-            left *= 0.8; // 80% power
-            right *= 0.8;
+            left *= 0.9; // 80% power
+            right *= 0.9;
 
             // Output the safe vales to the motor drives.
             leftDrive.setPower(left);
@@ -91,6 +91,7 @@ public class T2_Red_TeleOp extends T2_Base {
                 sweeper.dump();
                 toggle2 = 1;
             } else {
+                container.sweepBlock();
                 sweeper.stop();
             }
 

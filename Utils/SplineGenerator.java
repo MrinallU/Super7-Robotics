@@ -8,6 +8,7 @@ public class SplineGenerator {
 
 
     // NOTE: To visualize splines use this: https://github.com/MrinallU/Cubic-Spline-Interpolator
+    // Don't use this unless you know what you are doing...
     public SplineGenerator(){
 
     }
@@ -28,25 +29,17 @@ public class SplineGenerator {
         for (int functionNr = 0; functionNr < p.length - 1; functionNr++, row++) {
             Point p0 = p[functionNr], p1 = p[functionNr + 1];
             m[row][functionNr * 4] = new BigDecimal(p0.xP, MathContext.DECIMAL64).pow(3, MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 1] = new BigDecimal(p0.xP, MathContext.DECIMAL64).pow(2, MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 2] = new BigDecimal(p0.xP, MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 3] = new BigDecimal(1, MathContext.DECIMAL64);
-
             m[row][solutionIndex] = new BigDecimal(p0.yP, MathContext.DECIMAL64);
 
             ++row;
 
             m[row][functionNr * 4] = new BigDecimal(p1.xP, MathContext.DECIMAL64).pow(3, MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 1] = new BigDecimal(p1.xP, MathContext.DECIMAL64).pow(2, MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 2] = new BigDecimal(p1.xP, MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 3] = new BigDecimal(1, MathContext.DECIMAL64);
-
             m[row][solutionIndex] = new BigDecimal(p1.yP, MathContext.DECIMAL64);
 
         }
@@ -55,15 +48,10 @@ public class SplineGenerator {
         for (int functionNr = 0; functionNr < p.length - 2; functionNr++, row++) {
             Point p1 = p[functionNr + 1];
             m[row][functionNr * 4] = new BigDecimal(3, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP).pow(2, MathContext.DECIMAL64));
-
             m[row][functionNr * 4 + 1] = new BigDecimal(2, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP), MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 2] = new BigDecimal(1, MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 4] = new BigDecimal(-3).multiply(new BigDecimal(p1.xP).pow(2, MathContext.DECIMAL64));
-
             m[row][functionNr * 4 + 5] = new BigDecimal(-2, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP), MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 6] = new BigDecimal(-1, MathContext.DECIMAL64);
 
         }
@@ -73,22 +61,16 @@ public class SplineGenerator {
         for (int functionNr = 0; functionNr < p.length - 2; functionNr++, row++) {
             Point p1 = p[functionNr + 1];
             m[row][functionNr * 4] = new BigDecimal(6, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP, MathContext.DECIMAL64), MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 1] = new BigDecimal(2, MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 4] = new BigDecimal(-6, MathContext.DECIMAL64).multiply(new BigDecimal(p1.xP, MathContext.DECIMAL64), MathContext.DECIMAL64);
-
             m[row][functionNr * 4 + 5] = new BigDecimal(-2, MathContext.DECIMAL64);
         }
 
 
         // check these calculations later
         m[row][0] = new BigDecimal(6, MathContext.DECIMAL64).multiply(new BigDecimal(p[0].xP, MathContext.DECIMAL64), MathContext.DECIMAL64);
-
         m[row++][1] = new BigDecimal(2, MathContext.DECIMAL64);
-
         m[row][solutionIndex - 4] = new BigDecimal(6, MathContext.DECIMAL64).multiply(new BigDecimal(p[p.length - 1].xP, MathContext.DECIMAL64), MathContext.DECIMAL64);
-
         m[row][solutionIndex - 4 + 1] = new BigDecimal(2, MathContext.DECIMAL64);
 
 
