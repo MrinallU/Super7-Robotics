@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Outtake;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_T265Odometry;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
+import org.firstinspires.ftc.teamcode.Utils.Point;
 
 import java.util.List;
 
@@ -279,6 +280,27 @@ public abstract class T2_Base extends LinearOpMode
             backrightDrive.setPower(drive);
         }
         stopBot();
+    }
+
+    public double getAutoAimAngle(Point p){
+        double xDiff = p.xP - odometry.getX();
+        double yDiff = p.yP - odometry.getY();
+        return Math.toDegrees(Math.atan2(yDiff, xDiff));
+    }
+
+    public void autoAimToWobble(String opMode){
+        double targetAng;
+
+        if(opMode.equals("redPrimary"))
+            targetAng = getAutoAimAngle(new Point(0, 1));
+        else if(opMode.equals("redSecondary"))
+            targetAng = getAutoAimAngle(new Point(0, 1));
+        else if(opMode.equals("bluePrimary"))
+            targetAng = getAutoAimAngle(new Point(0, 1));
+        else
+            targetAng = getAutoAimAngle(new Point(0, 1));
+
+        turnToV2(targetAng, 6000, this);
     }
 
 

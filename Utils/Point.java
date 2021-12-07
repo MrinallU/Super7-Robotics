@@ -23,7 +23,6 @@ public class Point implements Comparable<Point> {
         this.yP = yP;
     }
 
-    // Returns the distance from this point to any other point specified
     public double getDistance(Point p2){
         return Math.sqrt((p2.yP - this.yP) * (p2.yP - this.yP) + (p2.xP - this.xP) * (p2.xP - this.xP));
     }
