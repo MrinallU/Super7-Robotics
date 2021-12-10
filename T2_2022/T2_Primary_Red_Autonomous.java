@@ -84,7 +84,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // move forward to carousel
-        xTo(-23, 1500, 0.2, 1, this, false);
+        xTo(-24, 1250, 0.1, 1, this, false);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -97,7 +97,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         stopCarousel();
 
         // move a few inches back
-        xTo(-33, 5000, 0.5, 1, this, false);
+        xTo(-32, 5000, 0.5, 1, this, false);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -175,7 +175,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // park inside hub
-        xTo(-25, 5000, 0.6, 2, this, true);
+        xTo(-25, 5000, 0.4, 2, this, true);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -193,4 +193,6 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         odometry.stopT265();
     }
 }
+
+
 
