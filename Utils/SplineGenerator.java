@@ -7,8 +7,14 @@ import java.util.Arrays;
 public class SplineGenerator {
 
 
-    // NOTE: To visualize splines use this: https://github.com/MrinallU/Cubic-Spline-Interpolator
-    // Don't use this unless you know what you are doing...
+    // NOTE: To visualize splines use this (we use cubic splines as opposed to roadrunner's quintic splines):
+    // https://github.com/MrinallU/Cubic-Spline-Interpolator
+    // Don't use/edit this unless you know what you are doing...
+
+    // todo: Derive spline trajectory velocity profiles (inches per second for x, y components)
+    // todo: Repeat for the theta process
+    // resource: https://github.com/acmerobotics/road-runner/blob/master/doc/pdf/Quintic_Splines_for_FTC.pdf
+    // resource: helpful python visualizer https://github.com/acmerobotics/road-runner/blob/master/doc/notebook/road-runner-lite.ipynb
     public SplineGenerator(){
 
     }

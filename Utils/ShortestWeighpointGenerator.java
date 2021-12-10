@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode.Utils;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+// resource: https://realitybytes.blog/2017/07/11/graph-based-path-planning-dijkstras-algorithm/
+// resource: https://cp-algorithms.com/graph/01_bfs.html
+
 public class ShortestWeighpointGenerator {
     static ArrayDeque<node> queue = new ArrayDeque<>();
-    static int [][] grid = new int[256][256]; // derive from image
-    static int [][] dist = new int[256][256];
+    static int [][] grid = new int[256+1][256+1]; // derive from image
+    static int [][] dist = new int[256+1][256+1];
 
     // Frame of reference is me on the back of the field
     // N, S, E, W, NE, NW, SE, SW
@@ -38,9 +41,9 @@ public class ShortestWeighpointGenerator {
                 if(res == -1)
                     continue;
                 else if(res == 1)
-                    queue.addLast(new node(nx, ny));
+                    queue.addLast(new node(nx, ny, curr.x, curr.y));
                 else
-                    queue.addFirst(new node(nx, ny));
+                    queue.addFirst(new node(nx, ny, curr.x, curr.y));
             }
         }
 
@@ -49,6 +52,7 @@ public class ShortestWeighpointGenerator {
 
     /*
      * Returns the cost of the path taken [1 = Object Collision; -1 = Out of Bounds].
+     * creates a 18 x 18 padding around the point to ensure collisions do not occur
      */
 
     public int updatePose(node currPose){
@@ -58,17 +62,25 @@ public class ShortestWeighpointGenerator {
                 if(grid[i][j] == 1) return 1; // Object collision
             }
         }
-
         return 0; // no collisions
     }
 
     static class node{
         int x;
         int y;
+        int prevX;
+        int prevY;
 
         public node(int x, int y){
             this.x = x;
             this.y = y;
+        }
+
+        public node(int x, int y, int pX, int pY) {
+            this.x = x;
+            this.y = y;
+            this.prevX = pX;
+            this.prevY = pY;
         }
     }
 }
