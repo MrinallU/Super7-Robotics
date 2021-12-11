@@ -34,7 +34,7 @@ public class T2_Outtake {
 
     public void moveBottom(){
         container.sweepBlock();
-        moveToPosition(1260);
+        moveToPosition(1235);
     }
 
     public void sweepPos(){
