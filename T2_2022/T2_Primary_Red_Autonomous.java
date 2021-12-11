@@ -193,6 +193,3 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         odometry.stopT265();
     }
 }
-
-
-

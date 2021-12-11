@@ -47,7 +47,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         arm.moveToPosition(300);
 
         // drive a little bit forward
-        xTo(-11, 5000, 0.5, 1, this, true);
+        xTo(-11, 5000, 0.8, 1, this, true);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -82,7 +82,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
 
         // place arm inside freight
 
-        yTo(-11, 5000, 0.3, 1, this, true);
+        yTo(-11, 5000, 0.5, 1, this, true);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -106,7 +106,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         telemetry.update();
 
         //approach barrier
-        yTo(-2, 5000, 0.5, 1, this, true);
+        yTo(-2, 5000, 0.8, 1, this, true);
         arm.container.dumpBlock();
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
@@ -134,7 +134,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
 
 
         // move into stack
-        xTo(-10, 5000, 0.3, 1, this, true);
+        xTo(-8, 2000, 0.3, 1, this, true);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -151,7 +151,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
 
         // move back
 
-        xTo(-17, 5000, 0.3, 1, this, true);
+        xTo(-17, 5000, 0.4, 1, this, true);
 
         arm.moveTop();
 
@@ -175,23 +175,13 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
 
-        // turn to wobble
-        turnToV2(88, 6000, this);
-        telemetry.addData("Shipping Element Placement: ", elementDiagram);
-        telemetry.addLine("Ang: " + getAngle());
-        telemetry.addLine("Pos: " + odometry.outStr);
-        telemetry.update();
-        sleep(500);
 
-        yTo(-12, 5000, 0.3, 1, this, true);
-        telemetry.addData("Shipping Element Placement: ", elementDiagram);
-        telemetry.addLine("Ang: " + getAngle());
-        telemetry.addLine("Pos: " + odometry.outStr);
-        telemetry.update();
+
 
         // drop arm to desired pos
         arm.moveTop();
 
+        //turn to wobble
         turnToV2(88, 6000, this);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
@@ -200,7 +190,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         // place arm inside freight
-        yTo(-14, 5000, 0.3, 1, this, true);
+        yTo(-14, 5000, 0.4, 1, this, true);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -214,7 +204,7 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         //approach barrier
-        yTo(-2, 5000, 0.5, 1, this, true);
+        yTo(-2, 5000, 0.8, 1, this, true);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
