@@ -10,6 +10,7 @@ public class ShortestWeighpointGenerator {
     static ArrayDeque<node> queue = new ArrayDeque<>();
     static int [][] grid = new int[256+1][256+1]; // derive from image
     static int [][] dist = new int[256+1][256+1];
+    static node [][] prev = new node[265+1][256+1];
 
     // Frame of reference is me on the back of the field
     // N, S, E, W, NE, NW, SE, SW
@@ -38,14 +39,27 @@ public class ShortestWeighpointGenerator {
                 int ny = curr.y + dy[k];
                 int res = updatePose(new node(nx, ny));
 
-                if(res == -1)
+                if (res == -1) {
                     continue;
-                else if(res == 1)
-                    queue.addLast(new node(nx, ny, curr.x, curr.y));
-                else
-                    queue.addFirst(new node(nx, ny, curr.x, curr.y));
+                } else if (res == 1){
+                    prev[nx][ny] = new node(curr.x, curr.y);
+                    dist[nx][ny] = dist[curr.x][curr.y] + 1;
+
+                    // N, S, E, W, NE, NW, SE, SW
+                    String travDir = getTravDir(k);
+                    queue.addLast(new node(nx, ny, travDir));
+                } else {
+                    prev[nx][ny] = new node(curr.x, curr.y);
+                    dist[nx][ny] = dist[curr.x][curr.y];
+
+                    String travDir = getTravDir(k);
+                    queue.addFirst(new node(nx, ny, travDir));
+                }
             }
         }
+
+        // reconstruct the path
+
 
         return weighPoints;
     }
@@ -65,22 +79,43 @@ public class ShortestWeighpointGenerator {
         return 0; // no collisions
     }
 
+    public String getTravDir(int k){
+        String travDir;
+        if(k == 0){
+            travDir = "N";
+        }else if(k == 1){
+            travDir = "S";
+        }else if(k == 2){
+            travDir = "E";
+        }else if(k == 3){
+            travDir = "W";
+        }else if(k == 4){
+            travDir = "NE";
+        }else if(k == 5){
+            travDir = "NW";
+        }else if(k == 6){
+            travDir = "SE";
+        }else{
+            travDir = "SE";
+        }
+
+        return travDir;
+    }
+
     static class node{
         int x;
         int y;
-        int prevX;
-        int prevY;
+        String dir;
 
         public node(int x, int y){
             this.x = x;
             this.y = y;
         }
 
-        public node(int x, int y, int pX, int pY) {
+        public node(int x, int y, String dir) {
             this.x = x;
             this.y = y;
-            this.prevX = pX;
-            this.prevY = pY;
+            this.dir = dir;
         }
     }
 }
