@@ -54,6 +54,7 @@ public abstract class T2_Base extends LinearOpMode
     private final double k_d = 0.003;
     private final double k_i = 0;
     private final double max_i = 0.01;
+    private double initAngle;
 
     /* Initialize standard Hardware interfaces */
     public void init(int matchType) {
@@ -108,9 +109,11 @@ public abstract class T2_Base extends LinearOpMode
         // Odometry
         resetAngle();
         if(matchType == 1){
-            odometry = new T2_T265Odometry(0, 0, -90, hardwareMap);
+            initAngle = -179;
+            odometry = new T2_T265Odometry(0, 0, -179, hardwareMap);
         }
         else{
+            initAngle = 0;
             odometry = new T2_T265Odometry(0, 0, 0, hardwareMap);
         }
     }
@@ -176,7 +179,7 @@ public abstract class T2_Base extends LinearOpMode
     public double getAngle() {
         return imu.getAngularOrientation(
                 AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES
-        ).firstAngle;
+        ).firstAngle + initAngle;
     }
 
     public double[] scalePowers (double bLeftPow, double fLeftPow, double bRightPow, double fRightPow){
@@ -267,6 +270,50 @@ public abstract class T2_Base extends LinearOpMode
         stopBot();
     }
 
+    public void turnToV2(double targetAngle, double timeout, double powerCap, double minDiff, LinearOpMode opMode)  {
+        double angleDiff = 100, currTime = 0;
+        double prevAngleDiff = 100;
+        double dAng, iAng = 0;
+
+        ElapsedTime time = new ElapsedTime(), cycleTime = new ElapsedTime();
+        double prevTime = 0;
+
+        while (time.milliseconds() < timeout && Math.abs(targetAngle - getAngle()) > minDiff && opMode.opModeIsActive())  {
+            cycleTime.reset();
+            resetCache();
+            odometry.updatePosition();
+            currTime = time.milliseconds() + 0.00001; // avoids divide by 0 error
+
+            // error from input
+            angleDiff = Angle.angleDifference(getAngle(), targetAngle);
+
+            // update
+            dAng = (angleDiff - prevAngleDiff) / (currTime - prevTime);
+            iAng +=  (angleDiff * (currTime - prevTime));
+
+            if(max_i < iAng){
+                iAng = max_i;
+            }else if(max_i * -1 > iAng){
+                iAng = -max_i;
+            }
+
+            prevTime = currTime;
+            prevAngleDiff = angleDiff;
+
+            // 0.1 = f, tanh = makes the values approach 1 to -1
+            double power = Range.clip(0.1 * Math.signum(angleDiff)
+                    + 0.9 * Math.tanh(k_p * angleDiff + k_d * dAng), -powerCap, powerCap);
+
+            setDrivePowers(-power, power, -power, power);
+
+            // Teleop Breakout
+            if(gamepad1.a && gamepad2.a){
+                break;
+            }
+        }
+        // stop when pos is reached
+        stopBot();
+    }
     public void turnToV2(double targetAngle, double timeout, LinearOpMode opMode){ turnToV2(targetAngle, timeout, 1, opMode); }
 
     public void xTo(double targetX, double timeout, double powerCap, double minDifference, LinearOpMode opMode, boolean negate){

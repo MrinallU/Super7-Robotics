@@ -40,7 +40,7 @@ public class T2_Blue_TeleOp extends T2_Base {
         double max;
         double sweeperPow;
 
-        init(0);
+        init(1);
         initServos();
         initOdometry();
         sleep(2000);

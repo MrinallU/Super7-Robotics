@@ -9,8 +9,8 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
     int armPos =  1000;
     @Override
     public void runOpMode() throws InterruptedException {
-        init(0);
-        initServos();
+        init(1);
+        initServosAuto();
         T2_Camera camera = new T2_Camera(hardwareMap);
         camera.readBarcode("bluePrimary");
         initOdometry();
@@ -37,22 +37,23 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
 
-        xTo(-15, 5000, 0.2, 1, this, true);
-        telemetry.addLine("Ang: " + getAngle());
-        telemetry.addLine("Pos: " + odometry.outStr);
-        telemetry.update();
+        // move a little bit foward
+        xTo(15, 5000, 0.2, 1, this, false);
 
+        //turn
+        turnToV2(88, 6000, 1, 3, this);
 
-        turnToV2(-115, 10000, this);
-        telemetry.addLine("Ang: " + getAngle());
-        telemetry.addLine("Pos: " + odometry.outStr);
-        telemetry.update();
+        // move forward to carousel
+        yTo(-15, 5000, 0.2, 1, this, true);
 
         sleep(500);
 
-        telemetry.addLine("Ang: " + getAngle());
-        telemetry.addLine("Pos: " + odometry.outStr);
-        telemetry.update();
+        // turn to carousel
+        turnToV2(-179, 10000, this);
+        sleep(500);
+
+
+
 
         sleep(500); // park
 

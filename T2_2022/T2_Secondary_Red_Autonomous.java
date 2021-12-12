@@ -150,7 +150,6 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
 
 
         // move back
-
         xTo(-17, 5000, 0.4, 1, this, true);
 
         arm.moveTop();
@@ -204,19 +203,22 @@ public class T2_Secondary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         //approach barrier
-        yTo(-2, 5000, 0.8, 1, this, true);
+        yTo(0, 5000, 0.8, 1, this, true);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
 
         //move into barrier
-        yTo(50, 5000, 0.3, 1, this, true);
+        yTo(45, 5000, 0.3, 1, this, true);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
         telemetry.update();
         sleep(500);
+
+        container.dumpBlock();
+        arm.sweepPosReset();
 
 
         while(opModeIsActive()){

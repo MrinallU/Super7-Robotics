@@ -60,7 +60,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         //turn
-        turnToV2(88, 6000, this);
+        turnToV2(88, 6000,1, 2, this);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);
@@ -97,7 +97,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         stopCarousel();
 
         // move a few inches back
-        xTo(-32, 5000, 0.5, 1, this, false);
+        xTo(-34, 5000, 0.5, 1, this, false);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);

@@ -53,8 +53,6 @@ public class T2_Camera {
 
         }
 
-        saveImage();
-
         double maxGreen = Math.max(Math.max(posOne[2], Math.max(posTwo[2], posThree[2])), greenThreshold);
 
         if(auto.contains("red")) {
@@ -78,6 +76,29 @@ public class T2_Camera {
     public void saveImage(){
         try{
             File outF = AppUtil.getInstance().getSettingsFile("Picture.png");
+            FileOutputStream out = new FileOutputStream(outF);
+
+            Bitmap bm;
+
+            // Link to image visualizer: https://yangcha.github.io/iview/iview.html
+
+            VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
+
+            bm = vuforia.convertFrameToBitmap(closeableFrame);
+            drawRectangle(bm, 345, 236, 365, 246);
+            drawRectangle(bm, 345, 280, 365, 300);
+
+            bm.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void saveImage(int id){
+        try{
+            File outF = AppUtil.getInstance().getSettingsFile("Picture" +id +".png");
             FileOutputStream out = new FileOutputStream(outF);
 
             Bitmap bm;
