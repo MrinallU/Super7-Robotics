@@ -18,6 +18,7 @@ public class T2_Camera {
     private HardwareMap hardwareMap;
 
     private int greenThreshold = 160;
+    private int blueThreshold = 170;
 
     public String outStr = "";
 
@@ -29,7 +30,7 @@ public class T2_Camera {
         this.hardwareMap = hardwareMap;
         initVuforia();
     }
-    
+
     public int readBarcode(String auto) throws InterruptedException{
         int position = 0;
         Bitmap bm;
@@ -48,28 +49,30 @@ public class T2_Camera {
             posTwo = calculateAverageRGB(bm, 20, 158, 84, 220);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "bluePrimary"){
-
+            posOne = calculateAverageRGB(bm, 357, 242, 436, 265);
+            posTwo = calculateAverageRGB(bm, 17 , 253, 56, 277);
+            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "blueSecondary"){
-
+            posOne = calculateAverageRGB(bm, 840, 186, 940, 205);
+            posTwo = calculateAverageRGB(bm, 457, 194, 552, 220);
+            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }
 
         double maxGreen = Math.max(Math.max(posOne[2], Math.max(posTwo[2], posThree[2])), greenThreshold);
+        double maxBlue = Math.max(Math.max(posOne[3], Math.max(posTwo[3], posThree[3])), blueThreshold);
 
-        if(auto.contains("red")) {
-            if (posOne[2] == maxGreen)
-                return 0;
-            else if (posTwo[2] == maxGreen)
-                return 1;
-            else
-                return 2;
+
+
+        if (posOne[2] == maxGreen){
+            return 0;
+        }else if(posOne[2] == maxGreen){
+            return 1;
         }else{
-            if (posOne[2] == maxGreen)
-                return 2;
-            else if (posTwo[2] == maxGreen)
-                return 1;
-            else
-                return 0;
+            return 2;
         }
+
+
+
     }
 
 
