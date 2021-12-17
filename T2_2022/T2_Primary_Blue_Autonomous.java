@@ -62,9 +62,9 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
         yTo(-5, 4000, 0.4, 1,this, false);
 
         if(pos == 0){
-            arm.moveBottom();
+            arm.moveBottomBlue();
         }else if(pos == 1){
-            arm.moveMid();
+            arm.moveMidBlue();
         }else{
             arm.moveTop();
         }
