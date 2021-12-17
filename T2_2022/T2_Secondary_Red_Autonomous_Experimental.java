@@ -92,7 +92,6 @@ public class T2_Secondary_Red_Autonomous_Experimental extends T2_Base {
         arm.sweepPos();
         sweeper.sweep();
 
-
         // turn to freight stack
         turnToV2(45, 6000, this);
         sleep(500);
@@ -133,6 +132,7 @@ public class T2_Secondary_Red_Autonomous_Experimental extends T2_Base {
         arm.dump();
         sleep(500);
         arm.container.dumpBlock();
+        sleep(500);
 
         //approach barrier
         yTo(-5, 5000, 0.8, 1, this, true);

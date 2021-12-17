@@ -34,9 +34,9 @@ public class T2_Secondary_Blue_Autonomous extends T2_Base{
         turnToV2(-86, 10000, this);
 
         if(pos == 0){
-            arm.moveBottom();
+            arm.moveBottomBlue();
         }else if(pos == 1){
-            arm.moveMid();
+            arm.moveMidBlue();
         }else{
             arm.moveTop();
         }
@@ -49,8 +49,9 @@ public class T2_Secondary_Blue_Autonomous extends T2_Base{
         sleep(500);
 
         arm.dump();
-        sleep(1000);
+        sleep(500);
         arm.container.dumpBlock();
+        sleep(500);
 
         turnToV2(-88, 10000, this);
 

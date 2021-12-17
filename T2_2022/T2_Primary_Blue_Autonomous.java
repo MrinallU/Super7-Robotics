@@ -41,8 +41,6 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
 
         sleep(500);
 
-
-
         // start carousel
         startBlueCarousel();
         sleep(3000);
@@ -73,9 +71,9 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
         yTo(10, 4000, 0.4, 1,this, false);
 
         arm.dump();
-        yTo(13, 4000, 0.1, 1,this, false);
         sleep(500);
         arm.container.dumpBlock();
+        sleep(500);
 
         yTo(-30, 4000, 0.4, 1,this, false);
 
