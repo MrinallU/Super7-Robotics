@@ -26,8 +26,7 @@ import org.firstinspires.ftc.teamcode.Utils.Point;
 
 import java.util.List;
 
-public abstract class T2_Base extends LinearOpMode
-{
+public abstract class T2_Base extends LinearOpMode {
     List<LynxModule> allHubs;
     public Motor  leftDrive   = null;
     public Motor  rightDrive  = null;
@@ -190,39 +189,10 @@ public abstract class T2_Base extends LinearOpMode
             fRightPow /= maxPow;
             bRightPow /= maxPow;
         }
-
         return new double[] {fLeftPow, bLeftPow, fRightPow, bRightPow};
     }
 
 
-    public void driveFieldCentric(double baseAngle, double drive){
-        double fRightPow, bRightPow, fLeftPow, bLeftPow;
-
-        double bLeftAngle = Math.toRadians(baseAngle + 135);
-        double fLeftAngle = Math.toRadians(baseAngle + 45);
-        double bRightAngle = Math.toRadians(baseAngle + 225);
-        double fRightAngle = Math.toRadians(baseAngle + 315);
-
-        fRightPow = (drive * Math.sin(fRightAngle));
-        bRightPow = (drive * Math.sin(bRightAngle));
-        fLeftPow = (drive * Math.sin(fLeftAngle));
-        bLeftPow = (drive * Math.sin(bLeftAngle));
-
-        double[] calculatedPower = scalePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
-        fLeftPow = calculatedPower[0];
-        bLeftPow = calculatedPower[1];
-        fRightPow = calculatedPower[2];
-        bRightPow = calculatedPower[3];
-
-
-//        fLeftPow = Math.tanh(fLeftPow);
-//        bLeftPow = Math.tanh(bLeftPow);
-//        fRightPow = Math.tanh(fRightPow);
-//        bRightPow = Math.tanh(bRightPow);
-
-
-        setDrivePowers(bLeftPow, fLeftPow, bRightPow, fRightPow);
-    }
 
     // my imu based turnTo
     public void turnToV2(double targetAngle, double timeout, double powerCap, LinearOpMode opMode)  {
@@ -368,48 +338,6 @@ public abstract class T2_Base extends LinearOpMode
             rightDrive.setPower(drive);
             backleftDrive.setPower(drive);
             backrightDrive.setPower(drive);
-        }
-        stopBot();
-    }
-
-    public void xTo(double targetX, double timeout, double powerCap, double minDifference, LinearOpMode opMode){
-        odometry.updatePosition();
-        double currX = odometry.getX(); // replace as needed
-        ElapsedTime time = new ElapsedTime();
-        while(Math.abs(currX - targetX) > minDifference && time.milliseconds() < timeout && opMode.opModeIsActive()){
-            resetCache();
-            odometry.updatePosition();
-            currX = odometry.getX();
-            double xDiff = currX - targetX;
-
-            // front is negative
-            // back positive
-            // 2 - 0 = 2 but cam is front so negate to go back to zero
-            /*
-            Back robot is not negated
-            Front cam is negated
-            Left cam is not negated
-            Right cam is negated
-             */
-            double drive = Range.clip(xDiff * 0.055, -powerCap, powerCap);
-
-            driveFieldCentric(getAngle(), drive) ;
-        }
-        stopBot();
-    }
-
-    public void yTo(double targetY, double timeout, double powerCap, double minDifference, LinearOpMode opMode){
-        odometry.updatePosition();
-        double Y = odometry.getY(); // replace as needed
-        ElapsedTime time = new ElapsedTime();
-        while(Math.abs(Y - targetY) > minDifference && time.milliseconds() < timeout && opMode.opModeIsActive()){
-            resetCache();
-            odometry.updatePosition();
-            Y = odometry.getY();
-            double yDiff = targetY - Y;
-            double drive = Range.clip(yDiff * 0.055, -powerCap, powerCap) * -1;
-
-            driveFieldCentric(getAngle(), drive) ;
         }
         stopBot();
     }

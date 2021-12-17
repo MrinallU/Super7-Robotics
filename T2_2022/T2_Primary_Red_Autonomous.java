@@ -106,7 +106,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
 
 
         // turn 90 degrees
-        turnToV2(92, 10000, this);
+        turnToV2(-92, 10000, this);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);

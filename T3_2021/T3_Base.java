@@ -559,6 +559,8 @@ public abstract class T3_Base extends LinearOpMode {
 
         for (int i = 0; i < coefficients.length; i += 4) {
             for (double x = p[i / 4].xP; x <= p[(i / 4) + 1].xP; x += 5) {
+                // think of this as polynomial (which it is...)
+                // y = ax^3 + bx^2 + cx + d
                 BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(x).pow(3, MathContext.DECIMAL64));
                 BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(x).pow(2, MathContext.DECIMAL64));
                 BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(x));

@@ -36,7 +36,7 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
         sleep(500);
 
         // move forward to carousel
-        yTo(-16.5, 3000, 0.2, 1,this, true);
+        yTo(-16.5, 2500, 0.2, 1,this, true);
 
 
         sleep(500);
