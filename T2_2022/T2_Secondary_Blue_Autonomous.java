@@ -72,7 +72,30 @@ public class T2_Secondary_Blue_Autonomous extends T2_Base{
         container.sweepBlock();
         arm.moveTop();
 
-        
+        xTo(12, 5000, 0.4, 1, this, false);
+        sleep(500);
 
+        // turn to wobble
+        turnToV2(-88, 10000, this);
+
+        // move to wobble
+        yTo(-19, 4000, 0.2, 1,this, false);
+
+        // dump
+        arm.dump();
+        sleep(1000);
+        arm.container.dumpBlock();
+        sleep(500);
+
+        // realign with barrier (prevents robot from getting stuck by approaching at a slightly off angle)
+        turnToV2(-88, 10000, this);
+        sleep(500);
+
+        // move inside the barrier
+        yTo( 25, 4000, 0.2, 1,this, false);
+        sleep(500);
+
+        arm.sweepPos();
+        sleep(1000);
     }
 }
