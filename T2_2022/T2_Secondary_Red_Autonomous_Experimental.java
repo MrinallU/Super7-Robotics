@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.T2_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
-
+@Disabled
 @Autonomous(name="T1_Secondary_Red_Autonomous_Experimental", group="Autonomous")
 public class T2_Secondary_Red_Autonomous_Experimental extends T2_Base {
     int pos =  0;

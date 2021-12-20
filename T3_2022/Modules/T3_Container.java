@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.T3_2022;
+package org.firstinspires.ftc.teamcode.T3_2022.Modules;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class T3_Container {
     Servo frontBlocker, sideBlocker;
-    double frontBlockPos = 0.20, sideBlockPos = 1, frontReleasePos = 1, sideReleasePos = 0;
+    double frontBlockPos = 0.20, sideBlockPos = 0.8, frontReleasePos = 1, sideReleasePos = 0;
 
     public T3_Container(Servo frontBlocker, Servo sideBlocker){
         this.frontBlocker = frontBlocker;
@@ -30,6 +30,11 @@ public class T3_Container {
 
     public void init(){
         frontBlocker.setPosition(frontReleasePos);
+        sideBlocker.setPosition(sideBlockPos);
+    }
+
+    public void initAuto(){
+        frontBlocker.setPosition(frontBlockPos);
         sideBlocker.setPosition(sideBlockPos);
     }
 }

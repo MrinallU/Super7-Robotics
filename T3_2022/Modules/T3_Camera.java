@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.T2_2022.Modules;
+package org.firstinspires.ftc.teamcode.T3_2022.Modules;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 
-public class T2_Camera {
+public class T3_Camera {
     private static final String VUFORIA_KEY = "AWnPBRj/////AAABmaYDUsaxX0BJg7/6QOpapAl4Xf18gqNd7L9nALxMG8K2AF6lodTZQ78nnksFc2CMy/3KmeolDEFGmp0CQJ7c/5PKymmJYckCfsg16B6Vnw5OihuD2mE7Ky0tT1VGdit2KvolunYkjWKDiJpX15SFMX//Jclt+Xt8riZqh3edXpUdREIXxS9tmdF/O6Nc5mUI7FEfAJHq4xUaqSY/yta/38qirjy3tdqFjDGc9g4DmgPE6+6dGLiXeUJYu32AgoefA1iFRF+ZVNJEc1j4oyw3JYQgWwfziqyAyPU2t9k9UDgqEkyxGxl4xS70KN/SBEUZeq4CzYfyon2kSSvKK/6/Vt4maMzG3LXfLt0PMiEPI1z+";
     private VuforiaLocalizer vuforia;
     private HardwareMap hardwareMap;
@@ -26,7 +26,7 @@ public class T2_Camera {
     // Rings Are YELLOW (255 R and 255 G)
     // Just look at blue value
 
-    public T2_Camera(HardwareMap hardwareMap){
+    public T3_Camera(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
         initVuforia();
     }
@@ -59,9 +59,6 @@ public class T2_Camera {
         }
 
         double maxGreen = Math.max(Math.max(posOne[2], Math.max(posTwo[2], posThree[2])), greenThreshold);
-        double maxBlue = Math.max(Math.max(posOne[3], Math.max(posTwo[3], posThree[3])), blueThreshold);
-
-
 
         if (posOne[2] == maxGreen){
             return 0;
@@ -73,6 +70,43 @@ public class T2_Camera {
 
 
 
+    }
+
+    public int readBarcodeRed(String auto) throws InterruptedException{
+        int position = 0;
+        Bitmap bm;
+        double[] posOne = new double[4];
+        double[] posTwo = new double[4];
+        double[] posThree = new double[4];
+
+        VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
+        bm = vuforia.convertFrameToBitmap(closeableFrame);
+        if(auto == "redPrimary"){
+            posOne = calculateAverageRGB(bm, 970, 233, 1052, 269);
+            posTwo = calculateAverageRGB(bm, 489, 261, 662, 287);
+            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
+        }else if(auto == "redSecondary"){
+            posOne = calculateAverageRGB(bm, 426, 278, 551, 307);
+            posTwo = calculateAverageRGB(bm, 52, 284, 85, 313 );
+            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
+        }else if(auto == "bluePrimary"){
+            posOne = calculateAverageRGB(bm, 354, 267, 492, 298);
+            posTwo = calculateAverageRGB(bm, 9 , 296, 43, 319);
+            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
+        }else if(auto == "blueSecondary"){
+            posOne = calculateAverageRGB(bm, 840, 186, 940, 205);
+            posTwo = calculateAverageRGB(bm, 457, 194, 552, 220);
+            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
+        }
+
+
+        if(posOne[2] < 20){
+            return 0;
+        }else if(posTwo[2] < 20){
+            return 1;
+        }else{
+            return 2;
+        }
     }
 
 

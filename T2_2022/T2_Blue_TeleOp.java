@@ -10,7 +10,7 @@ public class T2_Blue_TeleOp extends T2_Base {
     boolean yP;
     boolean yLP;
     boolean y2P;
-    boolean yL2P = y2P;
+    boolean yL2P;
     boolean a2P;
     boolean aL2P;
     boolean dPadRight2 = false;
@@ -25,6 +25,7 @@ public class T2_Blue_TeleOp extends T2_Base {
     boolean dPadLeftLast2 = false;
     boolean bL2P = false;
     boolean b2P = false;
+    boolean safeftyLock = true;
 
     int toggle1 = 1;
     int toggle2 = 1;
@@ -74,6 +75,12 @@ public class T2_Blue_TeleOp extends T2_Base {
             left *= 0.9; // 80% power
             right *= 0.9;
 
+            yL2P = y2P;
+            y2P = gamepad2.y;
+            if(!yL2P && y2P){
+                safeftyLock = !safeftyLock;
+            }
+
             // Output the safe vales to the motor drives.
             leftDrive.setPower(left);
             rightDrive.setPower(right);
@@ -121,7 +128,7 @@ public class T2_Blue_TeleOp extends T2_Base {
                 }
             }
 
-            if(arm.motor1.retMotorEx().getCurrentPosition() <= 500){
+            if(arm.motor1.retMotorEx().getCurrentPosition() <= 500 && safeftyLock){
                 arm.container.dumpBlock(); // safety
                 toggle3 = 2;
             }

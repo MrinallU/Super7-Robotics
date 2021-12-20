@@ -30,15 +30,22 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
 
         // move a little bit foward
         xTo(10, 5000, 0.4, 1, this, false);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
 
         //turn
         turnToV2(86, 3000, 1, 3, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
         sleep(500);
 
         // move forward to carousel
-        yTo(-16.5, 2500, 0.2, 1,this, true);
-
-
+        yTo(-16.5, 2000, 0.2, 1,this, true);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
         sleep(500);
 
         // start carousel
@@ -48,17 +55,32 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
 
         // turn to wobble
         turnToV2(-180, 3000, 1, 3, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
 
         // move back
-        xTo(14, 5000, 0.5, 1, this, false);
-        sleep(500);
+        xTo(18, 5000, 0.5, 1, this, false);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+        sleep(1000);
 
         // turn to wobble
-        turnToV2(-88, 10000, this);
+        turnToV2(-86, 10000, this);
+        sleep(500);
+        turnToV2(-86, 10000, this);
+        sleep(500);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
 
         // apporach wobble
         yTo(-5, 4000, 0.4, 1,this, false);
-
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
+//
         if(pos == 0){
             arm.moveBottomBlue();
         }else if(pos == 1){
@@ -68,14 +90,20 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
         }
         sleep(1500);
 
-        yTo(10, 4000, 0.4, 1,this, false);
+        yTo(11, 4000, 0.4, 1,this, false);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
 
         arm.dump();
         sleep(500);
         arm.container.dumpBlock();
         sleep(500);
 
-        yTo(-30, 4000, 0.4, 1,this, false);
+        yTo(-27, 4000, 0.4, 1,this, false);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
 
 
         arm.moveToPosition(135);
@@ -83,14 +111,13 @@ public class T2_Primary_Blue_Autonomous extends T2_Base {
 
         // turn to wobble
         turnToV2(-180, 3000, 1, 3, this);
+        telemetry.addLine("Ang: " + getAngle());
+        telemetry.addLine("Pos: " + odometry.outStr);
+        telemetry.update();
         sleep(500);
 
         // move back
-        xTo(23, 5000, 0.5, 1, this, false);
-
-
-
-
+        xTo(30, 5000, 0.5, 1, this, false);
 
         while(opModeIsActive()){
             resetCache();

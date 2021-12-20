@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.T2_2022;
+package org.firstinspires.ftc.teamcode.T3_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="T2-Red-TeleOp", group="T2")
-public class T2_Red_TeleOp extends T2_Base {
+import org.firstinspires.ftc.teamcode.T2_2022.T2_Base;
+
+@TeleOp(name="T3-Red-TeleOp", group="T3")
+public class T3_Red_TeleOp extends T3_Base {
     boolean carouselIsOn = false;
     boolean sweeperIsOn = false;
     boolean armIsOn = false;

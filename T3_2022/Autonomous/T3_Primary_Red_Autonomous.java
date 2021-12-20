@@ -1,11 +1,12 @@
-package org.firstinspires.ftc.teamcode.T2_2022;
+package org.firstinspires.ftc.teamcode.T3_2022.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
+import org.firstinspires.ftc.teamcode.T3_2022.T3_Base;
 
-@Autonomous(name="T2_Primary_Red_Autonomous", group="Autonomous")
-public class T2_Primary_Red_Autonomous extends T2_Base {
+@Autonomous(name="T3_Primary_Red_Autonomous", group="Autonomous")
+public class T3_Primary_Red_Autonomous extends T3_Base {
     int pos =  0;
     String elementDiagram = "";
 
@@ -60,7 +61,7 @@ public class T2_Primary_Red_Autonomous extends T2_Base {
         sleep(500);
 
         //turn
-        turnToV2(88, 6000,1, 2, this);
+        turnToV2(88, 6000, this);
         telemetry.addData("Shipping Element Placement: ", elementDiagram);
         telemetry.addLine("Ang: " + getAngle());
         telemetry.addLine("Pos: " + odometry.outStr);

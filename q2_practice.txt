@@ -1,7 +1,7 @@
 1. Learn
-2. ML
+2. ML/CV
 3. Learn
 4. Learn
-5. USACO Guide
-6. Practice
+5. USACO Guide/Webdev
+6. Practice/CF
 7. Practice

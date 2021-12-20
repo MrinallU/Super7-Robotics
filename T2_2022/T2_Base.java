@@ -98,10 +98,7 @@ public abstract class T2_Base extends LinearOpMode {
         backrightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         backleftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
 
-        leftDrive.setPower(0);
-        rightDrive.setPower(0);
-        backrightDrive.setPower(0);
-        backleftDrive.setPower(0);
+        stopBot();
 
         initServos();
 
@@ -109,11 +106,11 @@ public abstract class T2_Base extends LinearOpMode {
         resetAngle();
         if(matchType == 1){
             initAngle = -179;
-            odometry = new T2_T265Odometry(0, 0, -179, hardwareMap);
+            odometry = new T2_T265Odometry(-179, hardwareMap);
         }
         else{
             initAngle = 0;
-            odometry = new T2_T265Odometry(0, 0, 0, hardwareMap);
+            odometry = new T2_T265Odometry(0, hardwareMap);
         }
     }
 
@@ -180,19 +177,6 @@ public abstract class T2_Base extends LinearOpMode {
                 AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES
         ).firstAngle + initAngle;
     }
-
-    public double[] scalePowers (double bLeftPow, double fLeftPow, double bRightPow, double fRightPow){
-        double maxPow = Math.max(Math.max(Math.abs(fLeftPow), Math.abs(bLeftPow)), Math.max(Math.abs(fRightPow), Math.abs(bRightPow)));
-        if (maxPow > 1) {
-            fLeftPow /= maxPow;
-            bLeftPow /= maxPow;
-            fRightPow /= maxPow;
-            bRightPow /= maxPow;
-        }
-        return new double[] {fLeftPow, bLeftPow, fRightPow, bRightPow};
-    }
-
-
 
     // my imu based turnTo
     public void turnToV2(double targetAngle, double timeout, double powerCap, LinearOpMode opMode)  {

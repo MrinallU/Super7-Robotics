@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.T2_2022.Modules;
+package org.firstinspires.ftc.teamcode.T3_2022.Modules;
 
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
@@ -9,7 +9,7 @@ import com.spartronics4915.lib.T265Camera;
 
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
-public class T2_T265Odometry {
+public class T3_T265Odometry {
     // Motors
     public String outStr = "";
 
@@ -26,7 +26,7 @@ public class T2_T265Odometry {
     private T265Camera.CameraUpdate update;
     private static T265Camera slamara;
 
-    public T2_T265Odometry(double xPos, double yPos, double angle, HardwareMap hardwareMap) {
+    public T3_T265Odometry(double xPos, double yPos, double angle, HardwareMap hardwareMap) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.angle = angle;
@@ -34,7 +34,7 @@ public class T2_T265Odometry {
         startPos =  new Pose2d(new Translation2d(xPos * 0.0254, yPos * 0.0254), new Rotation2d(angle));
     }
 
-    public T2_T265Odometry(double angle, HardwareMap hardwareMap) {
+    public T3_T265Odometry(double angle, HardwareMap hardwareMap) {
         this.xPos = 0;
         this.yPos = 0;
         this.angle = angle;
@@ -42,7 +42,7 @@ public class T2_T265Odometry {
         startPos =  new Pose2d(new Translation2d(0 * 0.0254, 0 * 0.0254), new Rotation2d(angle));
     }
 
-    public T2_T265Odometry(HardwareMap hardwareMap) {
+    public T3_T265Odometry(HardwareMap hardwareMap) {
         this(0, hardwareMap);
     }
 
