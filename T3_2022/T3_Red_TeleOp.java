@@ -142,7 +142,7 @@ public class T3_Red_TeleOp extends T3_Base {
                 }
             }
 
-            if(arm.motor1.retMotorEx().getCurrentPosition() <= 500 && safeftyLock){
+            if(arm.motor1.retMotorEx().getCurrentPosition() <= 700 && safeftyLock){
                 arm.container.dumpBlock(); // safety
                 toggle3 = 2;
             }

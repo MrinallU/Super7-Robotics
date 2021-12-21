@@ -45,7 +45,8 @@ public class EncoderTest extends T3_Base {
             telemetry.update();
         }
 
-        moveTicksBack(20, 2000, 0.5, 2, this);
+
+        moveTicksBack(538, 6000, 0.2, 2, this);
 
         while(opModeIsActive()){
             resetCache();

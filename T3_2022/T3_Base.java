@@ -270,10 +270,11 @@ public abstract class T3_Base extends LinearOpMode {
     }
 
     // tick diff should be no less than 22!
+    // tick per in is 44.8
     public void moveTicks(double ticksMoved, double timeout, double powerCap, double minDifference, LinearOpMode opMode, boolean negate){
         odometry.updatePosition();
-        double currTicks = leftDrive.encoderReading(); // replace as needed
-        double destTick; 
+        double currTicks = leftDrive.encoderReading(); // todo: average all the values?? (further research required)
+        double destTick;
         ElapsedTime time = new ElapsedTime();
 
         if(negate) {
@@ -282,15 +283,21 @@ public abstract class T3_Base extends LinearOpMode {
              destTick = currTicks + ticksMoved;
         }
 
-        while(Math.abs(currTicks - (ticksMoved + currTicks)) > minDifference && time.milliseconds() < timeout && opMode.opModeIsActive()){
+        telemetry.addLine("pos " + leftDrive.encoderReading() + " " + (destTick));
+        telemetry.update();
+
+        while(Math.abs(currTicks - (destTick)) > minDifference && time.milliseconds() < timeout && opMode.opModeIsActive()){
             resetCache();
             odometry.updatePosition();
             currTicks = leftDrive.encoderReading();
 
             double tickDiff = destTick - currTicks;
-            double drive = Range.clip(tickDiff * 0.055, -powerCap, powerCap) * -1; // p-controller
+            double drive = Range.clip(tickDiff * 0.055, -powerCap, powerCap); // p-controller
 
             setDrivePowers(drive, drive, drive, drive);
+
+            telemetry.addLine("pos " + leftDrive.encoderReading() + " " + (tickDiff));
+            telemetry.update();
         }
         stopBot();
     }
