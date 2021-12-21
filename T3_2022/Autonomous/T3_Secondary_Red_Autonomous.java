@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.T3_2022.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.spartronics4915.lib.T265Camera;
 
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
 import org.firstinspires.ftc.teamcode.T3_2022.Modules.T3_Camera;
@@ -85,12 +86,24 @@ public class T3_Secondary_Red_Autonomous extends T3_Base {
         pos = 1;
 
 
-        while(opModeIsActive()){
-            resetCache();
-            odometry.updatePosition();
-            telemetry.addLine("cam pos " + odometry.outStr);
-            telemetry.addLine("imu angle " + getAngle());
+        if(odometry.poseConfidence == T265Camera.PoseConfidence.Failed || odometry.poseConfidence == T265Camera.PoseConfidence.Low){
+            // camera is not confident in position or init failed
+            // enter barrier and terminate
+            telemetry.addLine("pose conf: LOW; Entering barrier");
+            telemetry.update();
+
+            moveTicksFront(400, 4000, 0.4, 20, this);
+            turnToV2(90, 4000, this);
+            pos = 1;
+        }else {
+            // camera is fairly confident abt it's pose estimation so use the values
+            // cycle
+            telemetry.addLine("pose conf: HIGH; Cycling");
+            telemetry.update();
         }
+
+        telemetry.update();
+
 
         odometry.stopT265();
     }
