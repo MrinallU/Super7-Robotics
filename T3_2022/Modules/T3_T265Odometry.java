@@ -26,6 +26,9 @@ public class T3_T265Odometry {
     private T265Camera.CameraUpdate update;
     private static T265Camera slamara;
 
+    // conf
+    public T265Camera.PoseConfidence poseConfidence;
+
     public T3_T265Odometry(double xPos, double yPos, double angle, HardwareMap hardwareMap) {
         this.xPos = xPos;
         this.yPos = yPos;
@@ -101,6 +104,7 @@ public class T3_T265Odometry {
         }
     }
 
+
     public void startT265(){
         slamara.start();
     }
@@ -125,10 +129,14 @@ public class T3_T265Odometry {
             yPos = cY + yAdj;
             angle = normalizeAngle(cAng + angAdj);
 
+            // get pose confidence
+            poseConfidence = update.confidence;
+
             // Set string so values can be passed to telemetry
             outStr = "xPos: " + format(xPos) + "\nyPos: " + format(yPos) + "\nAngle: " + format(angle);
         }
     }
+
 
     public double normalizeAngle(double rawAngle) {
         double scaledAngle = rawAngle % 360;
