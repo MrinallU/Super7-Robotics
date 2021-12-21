@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.T3_2022.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
+import org.firstinspires.ftc.teamcode.T3_2022.Modules.T3_Camera;
 import org.firstinspires.ftc.teamcode.T3_2022.T3_Base;
 
 @Autonomous(name="T3_Primary_Red_Autonomous", group="Autonomous")
@@ -14,7 +15,7 @@ public class T3_Primary_Red_Autonomous extends T3_Base {
     public void runOpMode() throws InterruptedException {
         init(0);
         initServosAuto();
-        T2_Camera camera = new T2_Camera(hardwareMap);
+        T3_Camera camera = new T3_Camera(hardwareMap);
         initOdometry();
 
         telemetry.addData("Status", "Initialized");
@@ -59,7 +60,7 @@ public class T3_Primary_Red_Autonomous extends T3_Base {
         turnToV2(90, 4000, this);
         sleep(500);
 
-        pos = 2;
+        
 
         if(pos == 2){
             arm.moveTop();
@@ -72,8 +73,19 @@ public class T3_Primary_Red_Autonomous extends T3_Base {
             sleep(500);
 
             moveTicksBack(430, 4000, 0.5, 20, this);
-        }else {
+        }else if(pos == 1){
             arm.moveMid();
+            sleep(2000);
+
+            moveTicksFront(350, 4000, 0.5, 20, this);
+            sleep(500);
+
+            arm.dump();
+            sleep(500);
+
+            moveTicksBack(200, 4000, 0.5, 20, this);
+        }else{
+            arm.moveBottom();
             sleep(2000);
 
             moveTicksFront(250, 4000, 0.5, 20, this);
@@ -93,7 +105,7 @@ public class T3_Primary_Red_Autonomous extends T3_Base {
         moveTicksBack(750, 4000, 0.5, 20,this);
         sleep(500);
 
-        turnToV2(-176, 4000, this);
+        turnToV2(-180, 4000, this);
         sleep(500);
 
         moveTicksBack(500, 1500, 0.1, 20, this);
