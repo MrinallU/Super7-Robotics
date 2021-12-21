@@ -60,7 +60,7 @@ public class T3_Primary_Red_Autonomous extends T3_Base {
         turnToV2(90, 4000, this);
         sleep(500);
 
-        pos = 1;
+        
 
         if(pos == 2){
             arm.moveTop();
