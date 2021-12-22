@@ -17,8 +17,8 @@ public class T3_Camera {
     private VuforiaLocalizer vuforia;
     private HardwareMap hardwareMap;
 
-    private int greenThreshold = 175;
-    private int blueThreshold = 170;
+    private int blueThreshold = 70;
+    private int redThreshold = 70;
 
     public String outStr = "";
 
@@ -41,12 +41,12 @@ public class T3_Camera {
         VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
         bm = vuforia.convertFrameToBitmap(closeableFrame);
         if(auto == "redPrimary"){
-            posOne = calculateAverageRGB(bm, 970, 233, 1052, 269);
-            posTwo = calculateAverageRGB(bm, 489, 261, 662, 287);
+            posOne = calculateAverageRGB(bm, 976, 31, 1087, 80);
+            posTwo = calculateAverageRGB(bm, 439, 81, 558, 151);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "redSecondary"){
-            posOne = calculateAverageRGB(bm, 426, 278, 551, 307);
-            posTwo = calculateAverageRGB(bm, 52, 284, 85, 313 );
+            posOne = calculateAverageRGB(bm, 410, 61, 526, 137);
+            posTwo = calculateAverageRGB(bm, 62, 92, 112, 170);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "bluePrimary"){
             posOne = calculateAverageRGB(bm, 354, 267, 492, 298);
@@ -58,14 +58,24 @@ public class T3_Camera {
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }
 
-        double maxGreen = Math.max(Math.max(posOne[2], Math.max(posTwo[2], posThree[2])), greenThreshold);
 
-        if (posOne[2] == maxGreen){
-            return 0;
-        }else if(posTwo[2] == maxGreen){
-            return 1;
+
+        if(auto.contains("red")){
+            if(posOne[3] < blueThreshold){
+                return 0;
+            }else if(posTwo[3] < blueThreshold){
+                return 1;
+            }else{
+                return 2;
+            }
         }else{
-            return 2;
+            if(posOne[1] < redThreshold){
+                return 0;
+            }else if(posTwo[1] < redThreshold){
+                return 1;
+            }else{
+                return 2;
+            }
         }
 
 
@@ -145,8 +155,7 @@ public class T3_Camera {
             VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
 
             bm = vuforia.convertFrameToBitmap(closeableFrame);
-            drawRectangle(bm, 345, 236, 365, 246);
-            drawRectangle(bm, 345, 280, 365, 300);
+
 
             bm.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.close();
