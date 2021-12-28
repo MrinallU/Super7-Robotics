@@ -270,41 +270,41 @@ public abstract class T3_Base extends LinearOpMode {
         turnTo(angle, 6000);
     }
 
-    public void followSplinePath(Point [] p) {
-        BigDecimal[] coefficients = splineGenerator.generateSplinePath(p);
-
-        for (int i = 0; i < coefficients.length; i += 4) {
-            for (double x = p[i / 4].xP; x <= p[(i / 4) + 1].xP; x += 5) {
-                BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(x).pow(3, MathContext.DECIMAL64));
-                BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(x).pow(2, MathContext.DECIMAL64));
-                BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(x));
-                BigDecimal d = coefficients[i + 3];
-                double y = (a.add(b).add(c).add(d)).doubleValue();
-
-                // odometry.x, y, and angle are robot's current values
-                double xDiff = x - odometry.getX(); double yDiff = y - odometry.getY();
-                double angle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
-
-                // todo: Pass in the next point and set drive powers at the end of the loop such that it starts traversing there
-                // todo: Set at power min so the spline doesn't slow down too much when traversing.
-                splineMove(x, y, angle, 2, 2, 2, 4000, this);
-            }
-
-            // Just in case the final pos is a little bit off
-            double destX = p[(i / 4) + 1].xP;
-            BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(destX).pow(3, MathContext.DECIMAL64));
-            BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(destX).pow(2, MathContext.DECIMAL64));
-            BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(destX));
-            BigDecimal d = coefficients[i + 3];
-
-            double destY = (a.add(b).add(c).add(d)).doubleValue();
-            double xDiff = destX - odometry.getX(); double yDiff = destY - odometry.getY();
-            double destAngle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
-            splineMove(p[(i / 4) + 1].xP, destY, destAngle, 2, 2, 2, 4000, this);
-        }
-        setDrivePowers(0, 0, 0, 0);
-    }
-
+//    public void followSplinePath(Point [] p) {
+//        BigDecimal[] coefficients = splineGenerator.generateSplinePath(p);
+//
+//        for (int i = 0; i < coefficients.length; i += 4) {
+//            for (double x = p[i / 4].xP; x <= p[(i / 4) + 1].xP; x += 5) {
+//                BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(x).pow(3, MathContext.DECIMAL64));
+//                BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(x).pow(2, MathContext.DECIMAL64));
+//                BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(x));
+//                BigDecimal d = coefficients[i + 3];
+//                double y = (a.add(b).add(c).add(d)).doubleValue();
+//
+//                // odometry.x, y, and angle are robot's current values
+//                double xDiff = x - odometry.getX(); double yDiff = y - odometry.getY();
+//                double angle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
+//
+//                // todo: Pass in the next point and set drive powers at the end of the loop such that it starts traversing there
+//                // todo: Set at power min so the spline doesn't slow down too much when traversing.
+//                splineMove(x, y, angle, 2, 2, 2, 4000, this);
+//            }
+//
+//            // Just in case the final pos is a little bit off
+//            double destX = p[(i / 4) + 1].xP;
+//            BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(destX).pow(3, MathContext.DECIMAL64));
+//            BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(destX).pow(2, MathContext.DECIMAL64));
+//            BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(destX));
+//            BigDecimal d = coefficients[i + 3];
+//
+//            double destY = (a.add(b).add(c).add(d)).doubleValue();
+//            double xDiff = destX - odometry.getX(); double yDiff = destY - odometry.getY();
+//            double destAngle = odometry.normalizeAngle(Math.toDegrees(Math.atan2(yDiff, xDiff)));
+//            splineMove(p[(i / 4) + 1].xP, destY, destAngle, 2, 2, 2, 4000, this);
+//        }
+//        setDrivePowers(0, 0, 0, 0);
+//    }
+//
 
 
     // ODOMETRY FUNCTIONS

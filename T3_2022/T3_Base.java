@@ -1,6 +1,7 @@
 
 package org.firstinspires.ftc.teamcode.T3_2022;
 
+import com.acmerobotics.dashboard.canvas.Spline;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -19,13 +20,18 @@ import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Intake;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Outtake;
 import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_T265Odometry;
 import org.firstinspires.ftc.teamcode.T3_2022.Modules.T3_Container;
+import org.firstinspires.ftc.teamcode.T3_2022.Modules.T3_DifferentialDriveOdometry;
 import org.firstinspires.ftc.teamcode.T3_2022.Modules.T3_Intake;
 import org.firstinspires.ftc.teamcode.T3_2022.Modules.T3_Outtake;
 import org.firstinspires.ftc.teamcode.T3_2022.Modules.T3_T265Odometry;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Motor;
 import org.firstinspires.ftc.teamcode.Utils.Point;
+import org.firstinspires.ftc.teamcode.Utils.SplineGenerator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class T3_Base extends LinearOpMode {
@@ -44,6 +50,7 @@ public abstract class T3_Base extends LinearOpMode {
     public T3_Container container;
 
     public T3_T265Odometry odometry;
+    public T3_DifferentialDriveOdometry wheelOdometry;
 
     public static final double carouselPow = 0.4;
 
@@ -56,6 +63,7 @@ public abstract class T3_Base extends LinearOpMode {
     private final double k_i = 0;
     private final double max_i = 0.01;
     private double initAngle;
+    private SplineGenerator splineGenerator = new SplineGenerator();
 
     /* Initialize standard Hardware interfaces */
     public void init(int matchType) {
@@ -109,10 +117,12 @@ public abstract class T3_Base extends LinearOpMode {
         if(matchType == 1){
             initAngle = -179;
             odometry = new T3_T265Odometry(-179, hardwareMap);
+            wheelOdometry = new T3_DifferentialDriveOdometry(0, 0, -179);
         }
         else{
             initAngle = 0;
             odometry = new T3_T265Odometry(0, hardwareMap);
+            wheelOdometry = new T3_DifferentialDriveOdometry(0, 0, 0);
         }
     }
 
@@ -170,7 +180,6 @@ public abstract class T3_Base extends LinearOpMode {
         // Add change in angle to current angle to get current angle
         currAngle += deltaAngle;
         lastAngles = orientation;
-        telemetry.addData("gyro", orientation.firstAngle);
         return currAngle;
     }
 
@@ -182,6 +191,7 @@ public abstract class T3_Base extends LinearOpMode {
 
     // my imu based turnTo
     public void turnToV2(double targetAngle, double timeout, double powerCap, LinearOpMode opMode)  {
+
         double angleDiff = 100, currTime = 0;
         double prevAngleDiff = 100;
         double dAng, iAng = 0;
@@ -192,7 +202,12 @@ public abstract class T3_Base extends LinearOpMode {
         while (time.milliseconds() < timeout && Math.abs(targetAngle - getAngle()) > 1 && opMode.opModeIsActive())  {
             cycleTime.reset();
             resetCache();
-            odometry.updatePosition();
+            // update odometry convert tick velocity to inch velocity
+            wheelOdometry.updatePosition(
+                    leftDrive.encoderReading(),
+                    rightDrive.encoderReading(),
+                    getAngle());
+
             currTime = time.milliseconds() + 0.00001; // avoids divide by 0 error
 
             // error from input
@@ -202,6 +217,8 @@ public abstract class T3_Base extends LinearOpMode {
             double power = Math.tanh(k_p * angleDiff);
 
             setDrivePowers(-power, power, -power, power);
+            telemetry.addLine(wheelOdometry.displayPositions());
+            telemetry.update();
 
             // Teleop Breakout
             if(gamepad1.a && gamepad2.a){
@@ -215,13 +232,17 @@ public abstract class T3_Base extends LinearOpMode {
     public void turnToV2(double targetAngle, double timeout, LinearOpMode opMode){ turnToV2(targetAngle, timeout, 1, opMode); }
 
     public void xTo(double targetX, double timeout, double powerCap, double minDifference, LinearOpMode opMode, boolean negate){
-        odometry.updatePosition();
-        double currX = odometry.getX(); // replace as needed
+        double currX = wheelOdometry.getX(); // replace as needed
         ElapsedTime time = new ElapsedTime();
         while(Math.abs(currX - targetX) > minDifference && time.milliseconds() < timeout && opMode.opModeIsActive()){
             resetCache();
-            odometry.updatePosition();
-            currX = odometry.getX();
+            // update odometry convert tick velocity to inch velocity
+            wheelOdometry.updatePosition(
+                    leftDrive.encoderReading(),
+                    rightDrive.encoderReading(),
+                    getAngle());
+
+            currX = wheelOdometry.getX();
             double xDiff = currX - targetX;
 
             // front is negative
@@ -240,18 +261,24 @@ public abstract class T3_Base extends LinearOpMode {
             }
 
             setDrivePowers(drive, drive, drive, drive);
+            telemetry.addLine(wheelOdometry.displayPositions());
+            telemetry.update();
         }
         stopBot();
     }
 
-    public void yTo(double targetY, double timeout, double powerCap, double minDifference, LinearOpMode opMode, boolean negate){
-        odometry.updatePosition();
-        double Y = odometry.getY(); // replace as needed
+    public boolean yTo(double targetY, double timeout, double powerCap, double minDifference, LinearOpMode opMode, boolean negate){
+        double Y = wheelOdometry.getY(); // replace as needed
         ElapsedTime time = new ElapsedTime();
         while(Math.abs(Y - targetY) > minDifference && time.milliseconds() < timeout && opMode.opModeIsActive()){
             resetCache();
-            odometry.updatePosition();
-            Y = odometry.getY();
+            // update odometry convert tick velocity to inch velocity
+            wheelOdometry.updatePosition(
+                    leftDrive.encoderReading(),
+                    rightDrive.encoderReading(),
+                    getAngle());
+
+            Y = wheelOdometry.getY();
             double yDiff = targetY - Y;
             double drive = Range.clip(yDiff * 0.055, -powerCap, powerCap) * -1;
 
@@ -265,14 +292,26 @@ public abstract class T3_Base extends LinearOpMode {
             rightDrive.setPower(drive);
             backleftDrive.setPower(drive);
             backrightDrive.setPower(drive);
+
+            telemetry.addLine(wheelOdometry.displayPositions());
+            telemetry.update();
         }
         stopBot();
+
+        // works
+        return time.milliseconds() < timeout;
+
     }
 
     // tick diff should be no less than 22!
     // tick per in is 44.8
     public void moveTicks(double ticksMoved, double timeout, double powerCap, double minDifference, LinearOpMode opMode, boolean negate){
-        odometry.updatePosition();
+        // update odometry convert tick velocity to inch velocity
+        wheelOdometry.updatePosition(
+                leftDrive.encoderReading(),
+                rightDrive.encoderReading(),
+                getAngle());
+
         double currTicks = leftDrive.encoderReading(); // todo: average all the values?? (further research required)
         double destTick;
         ElapsedTime time = new ElapsedTime();
@@ -288,15 +327,21 @@ public abstract class T3_Base extends LinearOpMode {
 
         while(Math.abs(currTicks - (destTick)) > minDifference && time.milliseconds() < timeout && opMode.opModeIsActive()){
             resetCache();
-            odometry.updatePosition();
+            // update odometry convert tick velocity to inch velocity
+            wheelOdometry.updatePosition(
+                    leftDrive.encoderReading(),
+                    rightDrive.encoderReading(),
+                    getAngle());
+
             currTicks = leftDrive.encoderReading();
 
             double tickDiff = destTick - currTicks;
             double drive = Range.clip(tickDiff * 0.055, -powerCap, powerCap); // p-controller
 
             setDrivePowers(drive, drive, drive, drive);
+            odometry.updatePosition();
 
-            telemetry.addLine("pos " + leftDrive.encoderReading() + " " + (tickDiff));
+            telemetry.addLine(odometry.displayPositions());
             telemetry.update();
         }
         stopBot();
@@ -315,6 +360,69 @@ public abstract class T3_Base extends LinearOpMode {
         double yDiff = p.yP - odometry.getY();
         return Math.toDegrees(Math.atan2(yDiff, xDiff));
     }
+
+    // For now splines are processed in terms of increasing x, so knot splines are not possible
+    // todo add a d-component to the spline
+    public void traverseSpline(Point [] pts, double driveSpeedCap, double xError, boolean reverse) {
+        pts[0] = new Point(wheelOdometry.getX(), wheelOdometry.getY());
+        Arrays.sort(pts);
+        ArrayList<Point> wp = splineGenerator.generateSplinePath(pts); // get weighpoints for pp
+
+        // back to front
+        if(reverse)
+            Collections.reverse(wp);
+
+        while (Math.abs(wheelOdometry.getX() - pts[pts.length - 1].xP) > xError) {
+            wheelOdometry.updatePosition(
+                    leftDrive.encoderReading(),
+                    rightDrive.encoderReading(),
+                    getAngle());
+
+            // find point which fits the look ahead criteria
+            Point nxtP = null;
+            double fitDist = Double.MAX_VALUE;
+            for (Point p : wp
+            ) {
+                double ptDist = wheelOdometry.getPose().getDistance(p);
+                // make sure we arent going backwards in the spline... for now...
+                if (wheelOdometry.getX() < p.xP) {
+                    if (ptDist < fitDist) {
+                        fitDist = ptDist;
+                        nxtP = p;
+                    }
+                }
+            }
+
+            if (nxtP == null) {
+                System.out.println("Spline Completed");
+                stopBot();
+                break;
+            }
+            System.out.println("Norm: " + wheelOdometry.displayPositions() + " look-ahead pt " + nxtP.xP + " " + nxtP.yP);
+            // assign powers to follow the look-ahead point
+            double yDiff = nxtP.yP - wheelOdometry.getY();
+            double xDiff = nxtP.xP - wheelOdometry.getX();
+            double angDiff = Angle.angleDifference( Angle.normalize(getAngle()) ,
+                    Angle.normalize( Math.toDegrees(
+                            Math.atan2(yDiff, xDiff)
+                            )
+                    ));
+
+            if(Math.abs(angDiff) < 1)
+                angDiff = 0;
+
+            double turnSpeed = angDiff * 0.01; // Basic P-Control
+            double driveSpeed = Range.clip((pts[pts.length - 1].xP - wheelOdometry.getX() * 0.055),
+                    -driveSpeedCap, driveSpeedCap);
+
+            setDrivePowers(driveSpeed - turnSpeed,
+                    driveSpeed + turnSpeed,
+                    driveSpeed - turnSpeed,
+                    driveSpeed + turnSpeed);
+        }
+        stopBot();
+    }
+
 
     public void autoAimToWobble(String opMode){
         double targetAng;

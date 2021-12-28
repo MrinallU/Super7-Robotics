@@ -36,9 +36,6 @@ public class ShortestWeighpointGenerator {
             -1
     };
 
-    public ShortestWeighpointGenerator() {
-        // init image grid
-    }
 
     // Floyd warshalls? for dp computation.
     public ArrayList < Point > generatePath(Point sc, Point dest) {

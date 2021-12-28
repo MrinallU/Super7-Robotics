@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.T4_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.T3_2021.T3_Readings;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 
 

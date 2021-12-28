@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.T2_2022.Modules.T2_Camera;
 import org.firstinspires.ftc.teamcode.T3_2022.Modules.T3_Camera;
 import org.firstinspires.ftc.teamcode.T3_2022.T3_Base;
 
-@Autonomous(name="T3_Primary_Blue_Autonomous", group = "autos")
+@Autonomous(name="T3_Primary_Blue_Autonomous", group = "Autonomous")
 public class T3_Primary_Blue_Autonomous extends T3_Base{
     int pos = 0;
     String elementDiagram = "";

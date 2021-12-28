@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode.T2_2022.Modules;
 
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.arcrobotics.ftclib.geometry.Transform2d;
-import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.spartronics4915.lib.T265Camera;
+import com.spartronics4915.lib.T265Helper;
 
+import org.firstinspires.ftc.teamcode.Utils.Angle;
 import org.firstinspires.ftc.teamcode.Utils.Point;
 
 public class T2_T265Odometry {
     // Motors
     public String outStr = "";
-
 
     // Variables
     private double xPos, yPos, angle;
@@ -22,16 +20,20 @@ public class T2_T265Odometry {
     private double xAdj = 0, yAdj = 0, angAdj = 0;
     private boolean positionAdjusted = false;
 
+
     Pose2d startPos;
     private T265Camera.CameraUpdate update;
     private static T265Camera slamara;
+
+    // conf
+    public T265Camera.PoseConfidence poseConfidence;
 
     public T2_T265Odometry(double xPos, double yPos, double angle, HardwareMap hardwareMap) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.angle = angle;
         this.hardwareMap = hardwareMap;
-        startPos =  new Pose2d(new Translation2d(xPos * 0.0254, yPos * 0.0254), new Rotation2d(angle));
+        startPos =  new Pose2d(xPos * 0.0254, yPos * 0.0254, angle);
     }
 
     public T2_T265Odometry(double angle, HardwareMap hardwareMap) {
@@ -39,51 +41,22 @@ public class T2_T265Odometry {
         this.yPos = 0;
         this.angle = angle;
         this.hardwareMap = hardwareMap;
-        startPos =  new Pose2d(new Translation2d(0 * 0.0254, 0 * 0.0254), new Rotation2d(angle));
+        startPos =  new Pose2d(0 * 0.0254, 0 * 0.0254, angle);
     }
 
     public T2_T265Odometry(HardwareMap hardwareMap) {
         this(0, hardwareMap);
     }
 
-    public void setAdjustments(){
-        xAdj = -cX + startPos.getX();
-        yAdj = -cY + startPos.getY();
-        angAdj = -cAng + startPos.getRotation().getDegrees();
-    }
 
     private void setCurrents(){
-        Translation2d translation = new Translation2d(update.pose.getTranslation().getX() / 0.0254, update.pose.getTranslation().getY() / 0.0254);
-
-        cX = translation.getX();
-        cY = translation.getY();
-        cAng = update.pose.getRotation().getDegrees();
+        cX = update.pose.getX();
+        cY = update.pose.getY();
+        cAng = Angle.normalize(Angle.radians_to_degrees(update.pose.getHeading()));
     }
 
     public void initializeT265(){
-        String logMessage = "Failure";
-        int attempts = Integer.MAX_VALUE;
-
-        while(attempts > 0) {
-            if (slamara == null) {
-                slamara = new T265Camera(new Transform2d(), 1, hardwareMap.appContext);
-            }
-
-            try {
-                slamara.start();
-            } catch (Exception e) {
-                if (e.getMessage().toString().equals("Camera is already started")) {
-                    logMessage = "Success!";
-                    break;
-                } else {
-                    throw new RuntimeException(e.getMessage());
-                }
-            }
-
-            attempts--;
-        }
-
-        slamara.setPose(startPos);
+        slamara = T265Helper.getCamera(new T265Camera.OdometryInfo(startPos, 0), hardwareMap.appContext);
     }
 
     private void waitUpdate() {
@@ -101,6 +74,7 @@ public class T2_T265Odometry {
         }
     }
 
+
     public void startT265(){
         slamara.start();
     }
@@ -116,19 +90,18 @@ public class T2_T265Odometry {
         if(update != null){
             setCurrents();
 
-            if(!positionAdjusted){
-                positionAdjusted = true;
-                setAdjustments();
-            }
+            xPos = xAdj;
+            yPos = yAdj;
+            angle = angAdj;
 
-            xPos = cX + xAdj;
-            yPos = cY + yAdj;
-            angle = normalizeAngle(cAng + angAdj);
+            // get pose confidence
+            poseConfidence = update.confidence;
 
             // Set string so values can be passed to telemetry
             outStr = "xPos: " + format(xPos) + "\nyPos: " + format(yPos) + "\nAngle: " + format(angle);
         }
     }
+
 
     public double normalizeAngle(double rawAngle) {
         double scaledAngle = rawAngle % 360;

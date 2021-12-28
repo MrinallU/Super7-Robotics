@@ -19,7 +19,6 @@ public class T3_Container {
         sideBlocker.setPosition(sideBlockPos);
     }
 
-
     public void dumpRelease(){ // release
         sideBlocker.setPosition(sideReleasePos);
     } // to dump

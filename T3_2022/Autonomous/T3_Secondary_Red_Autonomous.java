@@ -18,14 +18,12 @@ public class T3_Secondary_Red_Autonomous extends T3_Base {
         initServosAuto();
         T3_Camera camera = new T3_Camera(hardwareMap);
         initOdometry();
+        sleep(3000);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
-
-
-        odometry.updatePosition();
 
         pos = camera.readBarcode("redSecondary");
 
@@ -59,13 +57,16 @@ public class T3_Secondary_Red_Autonomous extends T3_Base {
         sleep(500);
 
 
-        turnToV2(82, 4000, this);
+        turnToV2(86, 4000, this);
         sleep(500);
 
+        pos = 3;
         if(pos == 0){
             arm.moveBottom();
             sleep(1500);
-            moveTicksBack(800, 4000, 0.4, 20, this); //bottom deposit
+            arm.moveToPosition(1230);
+            sleep(500);
+            moveTicksBack(730, 4000, 0.4, 20, this); //bottom deposit
         }else if(pos == 1){
             arm.moveMid();
             sleep(1500);
@@ -81,30 +82,45 @@ public class T3_Secondary_Red_Autonomous extends T3_Base {
         sleep(500);
         container.dumpBlock();
 
-        moveTicksFront(400, 4000, 0.4, 20, this);
+        moveTicksFront(2500, 4000, 0.4, 20, this);
+        sleep(500);
+        arm.sweepPos();
+        sleep(1000);
+        turnToV2(30, 2000, this);
+        sleep(250);
+
+        sweeper.sweep();
+        sleep(2000);
+        sweeper.stop();
+        container.sweepBlock();
+
+        sweeper.dump();
+        sleep(1000);
+        sweeper.stop();
+
+
+        moveTicksBack(100, 4000, 0.4, 20, this);
+
         turnToV2(90, 4000, this);
-        pos = 1;
+        sleep(250);
+
+        moveTicksBack(500, 4000, 0.5, 20,this);
+        sleep(250);
+        arm.moveToPosition(500);
 
 
-        if(odometry.poseConfidence == T265Camera.PoseConfidence.Failed || odometry.poseConfidence == T265Camera.PoseConfidence.Low){
-            // camera is not confident in position or init failed
-            // enter barrier and terminate
-            telemetry.addLine("pose conf: LOW; Entering barrier");
-            telemetry.update();
-
-            moveTicksFront(400, 4000, 0.4, 20, this);
-            turnToV2(90, 4000, this);
-            pos = 1;
-        }else {
-            // camera is fairly confident abt it's pose estimation so use the values
-            // cycle
-            telemetry.addLine("pose conf: HIGH; Cycling");
-            telemetry.update();
-        }
-
-        telemetry.update();
+        moveTicksBack(1900, 4000, 0.5, 20,this);
+        sleep(250);
 
 
-        odometry.stopT265();
+        arm.moveTop();
+        sleep(1500);
+
+        arm.dump();
+        sleep(500);
+        container.dumpBlock();
+
+        moveTicksFront(2450, 6000, 0.4, 20, this);
+        arm.sweepPos();
     }
 }

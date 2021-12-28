@@ -53,7 +53,6 @@ public class T3_Red_TeleOp extends T3_Base {
         initOdometry();
         sleep(2000);
 
-        telemetry.addData("Camera Attempts", 0);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
@@ -63,7 +62,13 @@ public class T3_Red_TeleOp extends T3_Base {
 
         while (opModeIsActive()) {
             resetCache();
+
             odometry.updatePosition();
+            // update odometry convert tick velocity to inch velocity
+            wheelOdometry.updatePosition(
+                    leftDrive.encoderReading(),
+                    rightDrive.encoderReading(),
+                    getAngle());
 
             drive = -gamepad1.left_stick_y;
             turn  =  gamepad1.right_stick_x;
@@ -180,13 +185,16 @@ public class T3_Red_TeleOp extends T3_Base {
 
 
             // Send telemetry message to signify robot running;
+
+            telemetry.addLine("Arm Safety Status: "  + safeftyLock);
+            telemetry.addLine("Motor Pos: "  + leftDrive.encoderReading());
             telemetry.addLine("cam pos " + odometry.outStr);
+            telemetry.addLine("odo pos " + wheelOdometry.displayPositions());
             telemetry.addLine("imu angle " + getRelativeAngle());
-            telemetry.addLine("arm pos" + arm.motor1.retMotorEx().getCurrentPosition());
-            telemetry.addLine("arm is busy " + arm.motor1.isBusy());
             telemetry.update();
         }
 
         odometry.stopT265();
+        sleep(2000);
     }
 }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Utils;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SplineGenerator {
@@ -19,7 +20,12 @@ public class SplineGenerator {
 
     }
 
-    public BigDecimal[] generateSplinePath(Point [] p) {
+    /**
+     *
+     * @param p Array of points which the spline will interpolate
+     * @return A series of waypoints which a differential drive robot can follow.
+     */
+    public ArrayList<Point> generateSplinePath(Point [] p) {
         int row = 0;
         int solutionIndex = (p.length - 1) * 4;
         Arrays.sort(p);
@@ -86,7 +92,18 @@ public class SplineGenerator {
             coefficients[i] = reducedRowEchelonForm[i][reducedRowEchelonForm[i].length - 1];
         }
 
-        return coefficients;
+        ArrayList<Point> path = new ArrayList<>();
+        for (int i = 0; i < coefficients.length; i += 4) {
+            for (double j = p[i / 4].xP; j <= p[(i / 4) + 1].xP; j += 0.1) {
+                BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(j).pow(3, MathContext.DECIMAL64));
+                BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(j).pow(2, MathContext.DECIMAL64));
+                BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(j));
+                BigDecimal d = coefficients[i + 3];
+                path.add(new Point(j, a.add(b).add(c).add(d).doubleValue()));
+            }
+        }
+
+        return path;
     }
 
     public static BigDecimal [][] rref(BigDecimal[][] mat) {
