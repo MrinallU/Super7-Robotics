@@ -341,7 +341,7 @@ public abstract class T3_Base extends LinearOpMode {
             setDrivePowers(drive, drive, drive, drive);
             odometry.updatePosition();
 
-            telemetry.addLine(odometry.displayPositions());
+            telemetry.addLine(wheelOdometry.displayPositions());
             telemetry.update();
         }
         stopBot();
@@ -363,16 +363,18 @@ public abstract class T3_Base extends LinearOpMode {
 
     // For now splines are processed in terms of increasing x, so knot splines are not possible
     // todo add a d-component to the spline
-    public void traverseSpline(Point [] pts, double driveSpeedCap, double xError, boolean reverse) {
+    public void traverseSpline(Point [] pts, double driveSpeedCap, double xError, int lookAheadDist, boolean reverse) {
         pts[0] = new Point(wheelOdometry.getX(), wheelOdometry.getY());
         Arrays.sort(pts);
-        ArrayList<Point> wp = splineGenerator.generateSplinePath(pts); // get weighpoints for pp
-
+        ArrayList<Point> wp = splineGenerator.generateSplinePath(pts, lookAheadDist); // get weighpoints for pp
+        sleep(500);
         // back to front
-        if(reverse)
+        if(reverse) {
             Collections.reverse(wp);
+        }
 
         while (Math.abs(wheelOdometry.getX() - pts[pts.length - 1].xP) > xError) {
+            resetCache();
             wheelOdometry.updatePosition(
                     leftDrive.encoderReading(),
                     rightDrive.encoderReading(),
@@ -394,11 +396,11 @@ public abstract class T3_Base extends LinearOpMode {
             }
 
             if (nxtP == null) {
-                System.out.println("Spline Completed");
                 stopBot();
+                sleep(500);
                 break;
             }
-            System.out.println("Norm: " + wheelOdometry.displayPositions() + " look-ahead pt " + nxtP.xP + " " + nxtP.yP);
+
             // assign powers to follow the look-ahead point
             double yDiff = nxtP.yP - wheelOdometry.getY();
             double xDiff = nxtP.xP - wheelOdometry.getX();
@@ -408,7 +410,7 @@ public abstract class T3_Base extends LinearOpMode {
                             )
                     ));
 
-            if(Math.abs(angDiff) < 1)
+            if(Math.abs(angDiff) < 2)
                 angDiff = 0;
 
             double turnSpeed = angDiff * 0.01; // Basic P-Control
@@ -419,6 +421,9 @@ public abstract class T3_Base extends LinearOpMode {
                     driveSpeed + turnSpeed,
                     driveSpeed - turnSpeed,
                     driveSpeed + turnSpeed);
+
+            telemetry.addLine(wheelOdometry.displayPositions());
+            telemetry.update();
         }
         stopBot();
     }

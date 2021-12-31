@@ -184,11 +184,12 @@ public class T3_Red_TeleOp extends T3_Base {
 
 
 
+
+
             // Send telemetry message to signify robot running;
 
             telemetry.addLine("Arm Safety Status: "  + safeftyLock);
             telemetry.addLine("Motor Pos: "  + leftDrive.encoderReading());
-            telemetry.addLine("cam pos " + odometry.outStr);
             telemetry.addLine("odo pos " + wheelOdometry.displayPositions());
             telemetry.addLine("imu angle " + getRelativeAngle());
             telemetry.update();

@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.T2_2022;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+@Disabled
 @TeleOp(name="T2-Blue-TeleOp", group="T2")
 public class T2_Blue_TeleOp extends T2_Base {
     boolean carouselIsOn = false;

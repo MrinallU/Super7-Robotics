@@ -25,7 +25,7 @@ public class SplineGenerator {
      * @param p Array of points which the spline will interpolate
      * @return A series of waypoints which a differential drive robot can follow.
      */
-    public ArrayList<Point> generateSplinePath(Point [] p) {
+    public ArrayList<Point> generateSplinePath(Point [] p, int step) {
         int row = 0;
         int solutionIndex = (p.length - 1) * 4;
         Arrays.sort(p);
@@ -94,7 +94,7 @@ public class SplineGenerator {
 
         ArrayList<Point> path = new ArrayList<>();
         for (int i = 0; i < coefficients.length; i += 4) {
-            for (double j = p[i / 4].xP; j <= p[(i / 4) + 1].xP; j += 0.1) {
+            for (double j = p[i / 4].xP; j <= p[(i / 4) + 1].xP; j += step) {
                 BigDecimal a = coefficients[i].multiply(BigDecimal.valueOf(j).pow(3, MathContext.DECIMAL64));
                 BigDecimal b = coefficients[i + 1].multiply(BigDecimal.valueOf(j).pow(2, MathContext.DECIMAL64));
                 BigDecimal c = coefficients[i + 2].multiply(BigDecimal.valueOf(j));

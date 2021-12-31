@@ -109,24 +109,10 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
         //manouver to avoid driving over capstone
         moveTicksFront(200, 4000, 0.4, 20, this); 
         sleep(500);
-        turnToV2(0, 4000, this);
 
-        moveTicksBack(300, 4000, 0.4, 20, this);
+        turnToV2(-35, 4000, this);
+
+        moveTicksBack(1000, 4000, 0.4, 20, this);
         sleep(500);
-
-        turnToV2(-90, 3000, this);
-        sleep(500);
-
-        moveTicksBack(400, 3000, 0.4, 20, this);
-        sleep(500);
-
-        turnToV2(-6, 2000, this);
-        sleep(500);
-
-        moveTicksBack(650, 2000, 0.4, 20, this);
-
-
-
-
     }
 }
