@@ -136,9 +136,9 @@ public class T3_Red_TeleOp extends T3_Base {
             dPadLeft2 = gamepad2.dpad_left;
 
             if(gamepad2.dpad_up) {
-                arm.motor1.setPower(0.2);
+                arm.motor1.setPower(0.4);
             }else if(gamepad2.dpad_down){
-                arm.motor1.setPower(-0.2);
+                arm.motor1.setPower(-0.4);
             }else{
                 if(arm.motor1.retMotorEx().getCurrentPosition() < 25) {
                     arm.motor1.setPower(0);
