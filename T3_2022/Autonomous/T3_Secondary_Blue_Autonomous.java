@@ -78,6 +78,5 @@ public class T3_Secondary_Blue_Autonomous extends T3_Base {
         sleep(500);
         arm.moveToPosition(300);
 
-
     }
 }

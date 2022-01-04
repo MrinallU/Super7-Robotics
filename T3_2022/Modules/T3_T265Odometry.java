@@ -65,6 +65,7 @@ public class T3_T265Odometry {
 
     public void initializeT265(){
         slamara = T265Helper.getCamera(new T265Camera.OdometryInfo(startPos, 1), hardwareMap.appContext);
+        slamara.start();
     }
 
     public void stopT265(){
