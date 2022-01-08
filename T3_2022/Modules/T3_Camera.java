@@ -49,8 +49,11 @@ public class T3_Camera {
             posTwo = calculateAverageRGB(bm, 62, 92, 112, 170);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "bluePrimary"){
-            posOne = calculateAverageRGB(bm, 354, 267, 492, 298);
-            posTwo = calculateAverageRGB(bm, 9 , 296, 43, 319);
+            drawRectangle(bm, 390, 267, 532, 230);
+            drawRectangle(bm, 17 , 190, 65, 250);
+            saveImage();
+            posOne = calculateAverageRGB(bm, 390, 267, 532, 230);
+            posTwo = calculateAverageRGB(bm, 17 , 190, 65, 250);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "blueSecondary"){
             posOne = calculateAverageRGB(bm, 840, 186, 940, 205);
