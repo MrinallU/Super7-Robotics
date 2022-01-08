@@ -48,28 +48,28 @@ public class T3_T265Odometry {
     }
 
     public void updatePosition() {
-        update = slamara.getLastReceivedCameraUpdate();
-
-        if(update != null){
-            xPos = update.pose.getX() / 0.0254;
-            yPos = update.pose.getY() / 0.0254;
-            angle = Angle.normalize(Angle.radians_to_degrees(update.pose.getHeading()));
-
-            // get pose confidence
-            poseConfidence = update.confidence;
-
-            // Set string so values can be passed to telemetry
-            outStr = "xPos: " + format(xPos) + "\nyPos: " + format(yPos) + "\nAngle: " + format(angle);
-        }
+//        update = slamara.getLastReceivedCameraUpdate();
+//
+//        if(update != null){
+//            xPos = update.pose.getX() / 0.0254;
+//            yPos = update.pose.getY() / 0.0254;
+//            angle = Angle.normalize(Angle.radians_to_degrees(update.pose.getHeading()));
+//
+//            // get pose confidence
+//            poseConfidence = update.confidence;
+//
+//            // Set string so values can be passed to telemetry
+//            outStr = "xPos: " + format(xPos) + "\nyPos: " + format(yPos) + "\nAngle: " + format(angle);
+//        }
     }
 
     public void initializeT265(){
-        slamara = T265Helper.getCamera(new T265Camera.OdometryInfo(startPos, 1), hardwareMap.appContext);
-        slamara.start();
+//        slamara = T265Helper.getCamera(new T265Camera.OdometryInfo(startPos, 1), hardwareMap.appContext);
+//        slamara.start();
     }
 
     public void stopT265(){
-        T265Helper.destroyCamera();
+        //T265Helper.destroyCamera();
     }
 
     public String displayPositions() {

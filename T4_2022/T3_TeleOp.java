@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.T4_2022;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Utils.Angle;
 
-
+@Disabled
 @TeleOp(name = "T3-TeleOp", group = "Test")
 public class T3_TeleOp extends T3_Base {
     // Drive Variables

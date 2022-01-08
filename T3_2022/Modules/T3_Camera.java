@@ -100,8 +100,8 @@ public class T3_Camera {
             posTwo = calculateAverageRGB(bm, 52, 284, 85, 313 );
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "bluePrimary"){
-            posOne = calculateAverageRGB(bm, 354, 267, 492, 298);
-            posTwo = calculateAverageRGB(bm, 9 , 296, 43, 319);
+            posOne = calculateAverageRGB(bm, 400, 150, 540, 220);
+            posTwo = calculateAverageRGB(bm, 22, 140, 60, 215);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "blueSecondary"){
             posOne = calculateAverageRGB(bm, 840, 186, 940, 205);

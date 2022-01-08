@@ -95,6 +95,7 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
         sleep(500);
 
         moveTicksBack(200, 3000, 0.4, 20, this);
+        sleep(250);
 
         turnToV2(-92, 4000, this);
         sleep(500);

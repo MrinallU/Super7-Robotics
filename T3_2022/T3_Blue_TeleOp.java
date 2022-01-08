@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode.T3_2022;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.T2_2022.T2_Base;
-
-@TeleOp(name="T3-Red-TeleOp", group="T3")
-public class T3_Red_TeleOp extends T3_Base {
+@TeleOp(name="T3-Blue-TeleOp", group="T3")
+public class T3_Blue_TeleOp extends T3_Base {
     boolean carouselIsOn = false;
     boolean sweeperIsOn = false;
     boolean armIsOn = false;
@@ -177,7 +175,7 @@ public class T3_Red_TeleOp extends T3_Base {
 
 
             if(gamepad1.y){
-                startCarousel();
+                startBlueCarousel();
             }else{
                 stopCarousel();
             }

@@ -191,7 +191,6 @@ public abstract class T3_Base extends LinearOpMode {
 
     // my imu based turnTo
     public void turnToV2(double targetAngle, double timeout, double powerCap, LinearOpMode opMode)  {
-
         double angleDiff = 100, currTime = 0;
         double prevAngleDiff = 100;
         double dAng, iAng = 0;
@@ -366,7 +365,7 @@ public abstract class T3_Base extends LinearOpMode {
     public void traverseSpline(Point [] pts, double driveSpeedCap, double xError, int lookAheadDist, boolean reverse) {
         pts[0] = new Point(wheelOdometry.getX(), wheelOdometry.getY());
         Arrays.sort(pts);
-        ArrayList<Point> wp = splineGenerator.generateSplinePath(pts, lookAheadDist); // get weighpoints for pp
+        ArrayList<Point> wp = splineGenerator.generateSplinePath(pts, lookAheadDist); // get weighpoints
         sleep(500);
         // back to front
         if(reverse) {
@@ -375,6 +374,7 @@ public abstract class T3_Base extends LinearOpMode {
 
         while (Math.abs(wheelOdometry.getX() - pts[pts.length - 1].xP) > xError) {
             resetCache();
+            // update localizer
             wheelOdometry.updatePosition(
                     leftDrive.encoderReading(),
                     rightDrive.encoderReading(),
@@ -387,7 +387,7 @@ public abstract class T3_Base extends LinearOpMode {
             ) {
                 double ptDist = wheelOdometry.getPose().getDistance(p);
                 // make sure we arent going backwards in the spline... for now...
-                if (wheelOdometry.getX() < p.xP) {
+                if (wheelOdometry.getX() < p.xP) {      // find the closest point that is in front of the robot
                     if (ptDist < fitDist) {
                         fitDist = ptDist;
                         nxtP = p;
@@ -404,12 +404,13 @@ public abstract class T3_Base extends LinearOpMode {
             // assign powers to follow the look-ahead point
             double yDiff = nxtP.yP - wheelOdometry.getY();
             double xDiff = nxtP.xP - wheelOdometry.getX();
-            double angDiff = Angle.angleDifference( Angle.normalize(getAngle()) ,
+            double angDiff = Angle.angleDifference( Angle.normalize(getAngle()) , // get steering angle
                     Angle.normalize( Math.toDegrees(
                             Math.atan2(yDiff, xDiff)
                             )
                     ));
 
+            // P-Control for drive and turn
             if(Math.abs(angDiff) < 2)
                 angDiff = 0;
 
