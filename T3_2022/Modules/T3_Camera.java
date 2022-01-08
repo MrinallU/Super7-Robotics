@@ -49,15 +49,12 @@ public class T3_Camera {
             posTwo = calculateAverageRGB(bm, 62, 92, 112, 170);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "bluePrimary"){
-            drawRectangle(bm, 390, 267, 532, 230);
-            drawRectangle(bm, 17 , 190, 65, 250);
-            saveImage();
-            posOne = calculateAverageRGB(bm, 390, 267, 532, 230);
+            posOne = calculateAverageRGB(bm, 420, 183, 522, 257);
             posTwo = calculateAverageRGB(bm, 17 , 190, 65, 250);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "blueSecondary"){
-            posOne = calculateAverageRGB(bm, 840, 186, 940, 205);
-            posTwo = calculateAverageRGB(bm, 457, 194, 552, 220);
+            posOne = calculateAverageRGB(bm, 804, 69, 869, 115);
+            posTwo = calculateAverageRGB(bm, 326, 108, 450, 207);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }
 
@@ -103,7 +100,7 @@ public class T3_Camera {
             posTwo = calculateAverageRGB(bm, 52, 284, 85, 313 );
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "bluePrimary"){
-            posOne = calculateAverageRGB(bm, 400, 150, 540, 220);
+            posOne = calculateAverageRGB(bm, 420, 183, 522, 257);
             posTwo = calculateAverageRGB(bm, 22, 140, 60, 215);
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "blueSecondary"){
