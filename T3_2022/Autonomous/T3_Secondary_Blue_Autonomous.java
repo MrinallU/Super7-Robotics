@@ -51,12 +51,14 @@ public class T3_Secondary_Blue_Autonomous extends T3_Base {
         sleep(500);
         container.sweepRelease();
         sweeper.sweep();
+        sleep(250);
+        moveTicksFront(200, 2000, 0.4, 20, this);
         sleep(1500);
         sweeper.stop();
 
         container.sweepBlock();
         sweeper.dump();
-        moveTicksBack(200, 2000, 0.4, 20, this);
+        moveTicksBack(300, 2000, 0.4, 20, this);
         turnToV2(90, 2000, this);
         sweeper.stop();
         sleep(500);

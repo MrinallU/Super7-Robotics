@@ -27,8 +27,6 @@ public class T3_Primary_Red_Autonomous extends T3_Base {
         odometry.updatePosition();
 
         pos = camera.readBarcode("redPrimary");
-
-
         if(pos == 0){
             telemetry.addData("Wobble Level: ", "Bottom");
             telemetry.addData("Shipping Element Placement: ", "☒ ☐ ☐");
