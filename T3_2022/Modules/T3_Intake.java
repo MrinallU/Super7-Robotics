@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.Utils.Motor;
 public class T3_Intake {
     Motor sweeper;
 
-    double sweepPower = -1;
+    double sweepPower = -0.8;
 
     public T3_Intake(Motor sweeper){
         this.sweeper = sweeper;

@@ -87,7 +87,7 @@ public class T3_Secondary_Red_Autonomous extends T3_Base {
         container.dumpBlock();
         arm.sweepPos();
         sleep(1000);
-        turnToV2(25, 2000, this);
+        turnToV2(60, 2000, this);
         sleep(250);
 
 
@@ -100,7 +100,7 @@ public class T3_Secondary_Red_Autonomous extends T3_Base {
         container.sweepBlock();
 
         sweeper.dump();
-        sleep(1000);
+        sleep(2500);
         sweeper.stop();
 
 
@@ -125,7 +125,8 @@ public class T3_Secondary_Red_Autonomous extends T3_Base {
         sleep(500);
         container.dumpBlock();
 
-        moveTicksFront(2450, 6000, 0.4, 20, this);
+        moveTicksFront(2750, 6000, 0.4, 20, this);
         arm.sweepPos();
+        sleep(500);
     }
 }

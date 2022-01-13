@@ -19,66 +19,45 @@ public class T3_Secondary_Blue_Autonomous extends T3_Base {
         T3_Camera camera = new T3_Camera(hardwareMap);
         initOdometry();
         sleep(2000);
-
+        pos = camera.readBarcode("blueSecondary");
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
         arm.moveToPosition(300);
-        moveTicksBack(570, 3000, 0.3, 20, this);
+        xTo(-10, 3000, 0.3,  1, this, true );
         sleep(500);
 
-        arm.moveMid();
-        sleep(1000);
-
-        turnToV2(45, 4000, this);
-        sleep(500);
-
-        arm.dump();
-        sleep(500);
-
-        turnToV2(90, 2000, this);
-        sleep(500);
-        container.dumpBlock();
-        arm.moveToPosition(300);
-        sleep(500);
-
-        moveTicksBack(1850, 4500, 0.4, 20, this);
-        sleep(500);
-
-        turnToV2(-45, 3000, this);
-        arm.sweepPos();
-        sleep(500);
-        container.sweepRelease();
-        sweeper.sweep();
-        sleep(250);
-        moveTicksFront(200, 2000, 0.4, 20, this);
-        sleep(1500);
-        sweeper.stop();
-
-        container.sweepBlock();
-        sweeper.dump();
-        moveTicksBack(300, 2000, 0.4, 20, this);
-        turnToV2(90, 2000, this);
-        sweeper.stop();
-        sleep(500);
-        arm.moveToPosition(300);
-
-        moveTicksFront(2000, 3000, 0.4, 20, this);
-        sleep(500);
-        arm.moveTop();
-
-        turnToV2(45, 2000, this);
-        sleep(500);
-        arm.dump();
-
-        sleep(500);
-        container.dumpBlock();
         turnToV2(90, 3000, this);
+
+        sleep(250);
+        if(pos == 0){
+            arm.moveBottom();
+            sleep(1500);
+        }else if(pos == 1){
+            arm.moveMid();
+            sleep(1500);
+        }else{
+            arm.moveTop();
+            sleep(1500);
+        }
+
+        sleep(250);
+        yTo(15, 3000, 0.3,  1, this, true );
+
+        sleep(250);
+        arm.dump();
         sleep(500);
-        moveTicksBack(2000, 4000, 0.4, 20, this);
-        sleep(500);
+
+        yTo(0, 3000, 0.3,  1, this, true );
+        sleep(250);
+        container.dumpBlock();
+        sleep(250);
+
+        moveTicksBack(2000, 2000, 0.5, 40, this);
+        sleep(250);
         arm.moveToPosition(300);
+        sleep(500);
 
     }
 }

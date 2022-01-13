@@ -29,7 +29,7 @@ public class T3_Outtake {
 
     public void moveMid(){
         container.sweepBlock();
-        moveToPosition(1140);
+        moveToPosition(1150);
     }
 
     public void moveBottom(){

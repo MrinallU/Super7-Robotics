@@ -62,15 +62,15 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
         if(pos == 0){
             arm.moveBottom();
             sleep(1500);
-            moveTicksBack(490, 4000, 0.4, 20, this);
+            moveTicksBack(660, 4000, 0.4, 20, this);
         }else if(pos == 1){
             arm.moveMid();
             sleep(1500);
-            moveTicksBack(550, 4000, 0.4, 20, this);
+            moveTicksBack(660, 4000, 0.4, 20, this);
         }else{
             arm.moveTop();
             sleep(1500);
-            moveTicksBack(550, 4000, 0.4, 20, this);
+            moveTicksBack(660, 4000, 0.4, 20, this);
         }
 
 
@@ -90,13 +90,13 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
         turnToV2(180, 4000, this);
         sleep(500);
 
-        moveTicksBack(240, 3000, 0.4, 20, this);
+        moveTicksBack(100, 3000, 0.4, 20, this);
         sleep(250);
 
         turnToV2(-92, 4000, this);
         sleep(500);
 
-        moveTicksBack(975, 6000, 0.2, 20, this);
+        moveTicksBack(1070, 6000, 0.2, 20, this);
         sleep(500);
 
         startBlueCarousel();

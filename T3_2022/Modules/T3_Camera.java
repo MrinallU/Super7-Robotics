@@ -54,8 +54,8 @@ public class T3_Camera {
             posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
         }else if(auto == "blueSecondary"){
             posOne = calculateAverageRGB(bm, 804, 69, 869, 115);
-            posTwo = calculateAverageRGB(bm, 326, 108, 450, 207);
-            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
+            posTwo = calculateAverageRGB(bm, 323, 135, 456, 195);
+            posThree = calculateAverageRGB(bm, 56, 106, 152, 181);
         }
 
 
@@ -68,7 +68,7 @@ public class T3_Camera {
             }else{
                 return 2;
             }
-        }else{
+        }else if(auto == "bluePrimary"){
             if(posOne[1] < redThreshold){
                 return 0;
             }else if(posTwo[1] < redThreshold){
@@ -76,46 +76,14 @@ public class T3_Camera {
             }else{
                 return 2;
             }
-        }
-
-
-
-    }
-
-    public int readBarcodeRed(String auto) throws InterruptedException{
-        int position = 0;
-        Bitmap bm;
-        double[] posOne = new double[4];
-        double[] posTwo = new double[4];
-        double[] posThree = new double[4];
-
-        VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
-        bm = vuforia.convertFrameToBitmap(closeableFrame);
-        if(auto == "redPrimary"){
-            posOne = calculateAverageRGB(bm, 970, 233, 1052, 269);
-            posTwo = calculateAverageRGB(bm, 489, 261, 662, 287);
-            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
-        }else if(auto == "redSecondary"){
-            posOne = calculateAverageRGB(bm, 426, 278, 551, 307);
-            posTwo = calculateAverageRGB(bm, 52, 284, 85, 313 );
-            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
-        }else if(auto == "bluePrimary"){
-            posOne = calculateAverageRGB(bm, 400, 150, 540, 220);
-            posTwo = calculateAverageRGB(bm, 22, 140, 60, 215);
-            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
-        }else if(auto == "blueSecondary"){
-            posOne = calculateAverageRGB(bm, 840, 186, 940, 205);
-            posTwo = calculateAverageRGB(bm, 457, 194, 552, 220);
-            posThree = calculateAverageRGB(bm, 0, 0, 0, 0);
-        }
-
-
-        if(posOne[2] < 20){
-            return 0;
-        }else if(posTwo[2] < 20){
-            return 1;
-        }else{
-            return 2;
+        }else {
+            if (posThree[1] < redThreshold) {
+                return 2;
+            } else if (posTwo[1] < redThreshold) {
+                return 1;
+            } else {
+                return 0;
+            }
         }
     }
 
