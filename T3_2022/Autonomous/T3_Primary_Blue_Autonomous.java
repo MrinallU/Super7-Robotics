@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.T3_2022.T3_Base;
 public class T3_Primary_Blue_Autonomous extends T3_Base{
     int pos = 0;
     String elementDiagram = "";
+    int bottomOffset = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,8 +30,6 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
         odometry.updatePosition();
 
         pos = camera.readBarcode("bluePrimary");
-
-
         if (pos == 0) {
             telemetry.addData("Wobble Level: ", "Bottom");
             telemetry.addData("Shipping Element Placement: ", "☒ ☐ ☐");
@@ -60,21 +59,20 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
         turnToV2(93, 4000, this);
         sleep(500);
 
-        pos = 2;
 
         if(pos == 0){
             arm.moveBottom();
             sleep(1500);
-            moveTicksBack(490, 4000, 0.4, 20, this);
+            moveTicksBack(600, 4000, 0.4, 20, this);
+            bottomOffset = 60;
         }else if(pos == 1){
             arm.moveMid();
             sleep(1500);
-            moveTicksBack(550, 4000, 0.4, 20, this);
-
+            moveTicksBack(660, 4000, 0.4, 20, this);
         }else{
             arm.moveTop();
             sleep(1500);
-            moveTicksBack(550, 4000, 0.4, 20, this);
+            moveTicksBack(660, 4000, 0.4, 20, this);
         }
 
 
@@ -85,7 +83,7 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
 
 
         //600
-        moveTicksFront(550, 4000, 0.4, 20, this);
+        moveTicksFront(550 + bottomOffset, 4000, 0.4, 20, this);
         container.dumpBlock();
         sleep(500);
         arm.moveToPosition(300);
@@ -94,13 +92,13 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
         turnToV2(180, 4000, this);
         sleep(500);
 
-        moveTicksBack(200, 3000, 0.4, 20, this);
+        moveTicksBack(175, 3000, 0.4, 20, this);
         sleep(250);
 
         turnToV2(-92, 4000, this);
         sleep(500);
 
-        moveTicksBack(975, 6000, 0.2, 20, this);
+        moveTicksBack(1115, 6000, 0.2, 20, this);
         sleep(500);
 
         startBlueCarousel();
@@ -108,12 +106,15 @@ public class T3_Primary_Blue_Autonomous extends T3_Base{
         stopCarousel();
 
         //manouver to avoid driving over capstone
-        moveTicksFront(200, 4000, 0.4, 20, this); 
+        moveTicksFront(200, 4000, 0.4, 20, this);
         sleep(500);
 
         turnToV2(-35, 4000, this);
 
         moveTicksBack(1000, 4000, 0.4, 20, this);
+        sleep(250);
+        turnToV2(0, 4000, this);
+
         sleep(500);
     }
 }
