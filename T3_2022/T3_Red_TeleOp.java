@@ -34,7 +34,6 @@ public class T3_Red_TeleOp extends T3_Base {
 
     int toggle1 = 1;
     int toggle2 = 1;
-    int toggle3 = 1;
 
 
     @Override
@@ -149,7 +148,7 @@ public class T3_Red_TeleOp extends T3_Base {
 
             if(arm.motor1.retMotorEx().getCurrentPosition() <= 700 && safeftyLock){
                 arm.container.dumpBlock(); // safety
-                toggle3 = 2;
+                toggle1 = 2;
             }
 
             // manual blocker controls

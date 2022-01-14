@@ -147,7 +147,7 @@ public class T3_Blue_TeleOp extends T3_Base {
 
             if(arm.motor1.retMotorEx().getCurrentPosition() <= 700 && safeftyLock){
                 arm.container.dumpBlock(); // safety
-                toggle3 = 2;
+                toggle1 = 2;
             }
 
             // manual blocker controls
